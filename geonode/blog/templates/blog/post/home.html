@@ -1,10 +1,23 @@
-<h1>Hello World</h1>
+{% extends "geonode_base.html" %}
+{% load i18n %}
 
-<ul>
-    {% for post in object_list %}
-        <li>
-            {{ post.title }} - {{ post.author }} ({{ post.author.last_name }}/{{ post.author.email }}) <br>
-            {{ post.body }}
-        </li>
-    {% endfor %}
-</ul>
+{% block title %} Blog Page {% endblock %}
+
+{% block body_outer %}
+    <a href="{% url 'blog:add_post' %}">Add Post</a>
+{#    <a href="{% url 'add_category' %}">Add Category</a>#}
+    <ul>
+        {% for post in object_list %}
+            <li>
+                <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }} - {{ post.author }} ({{ post.author.last_name }}/{{ post.author.email }}) <br></a>
+                <a href="{% url 'blog:category_posts' post.category.slug %}">{{ post.category }}</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'blog:update_post' post.pk %}">Edit</a> | <a href="{% url 'blog:delete_post' post.pk %}">Delete</a>
+                {% endif %}
+
+                {{ post.body | safe | truncatewords:30 }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

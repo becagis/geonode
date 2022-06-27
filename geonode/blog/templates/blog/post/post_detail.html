@@ -1,1 +1,28 @@
-<h1>Post Detail</h1>
+{% extends "geonode_base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block body_outer %}
+    <h1>{{ post.title }} - {{ post.author }} - {{ post.date_published.date }}</h1>
+    <div>
+        {{ post.body | safe }}
+    </div>
+    <a href="{% url 'home' %}">Back</a>
+
+    <form method="POST" action="{% url 'blog:post_like' post.pk %}">
+        {% csrf_token %}
+        {% if user.is_authenticated %}
+            <div class="flex">
+                {% if liked %}
+                    <button type="submit" class="btn btn-danger">Unlike</button>
+                {% else %}
+                    <button type="submit" class="btn btn-primary">Like</button>
+                {% endif %}
+            </div>
+        {% else %}
+            <small>Login to like</small>
+        {% endif %}
+
+        - {{ total_likes }}
+    </form>
+{% endblock %}

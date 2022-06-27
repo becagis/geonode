@@ -1,0 +1,12 @@
+{% extends "geonode_base.html" %}
+
+{% block title %} Edit Post {% endblock %}
+
+{% block body_outer %}
+    <h1>Edit: {{ post.title }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update</button>
+    </form>
+{% endblock %}

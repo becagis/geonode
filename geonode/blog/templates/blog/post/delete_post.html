@@ -1,0 +1,12 @@
+{% extends "geonode_base.html" %}
+
+{% block title %} Delete Post {% endblock %}
+
+{% block body_outer %}
+    <h1>Delete {{ post.title }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <strong>Are you sure?</strong>
+        <button type="submit">Delete Post</button>
+    </form>
+{% endblock %}

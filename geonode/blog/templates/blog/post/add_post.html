@@ -1,0 +1,16 @@
+{% extends "geonode_base.html" %}
+
+{% block title %} Add Post {% endblock %}
+
+{% block body_outer %}
+    {% if user.is_authenticated %}
+        <h1>Add Blog Post</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add</button>
+        </form>
+    {% else %}
+        You are not allowed here!
+    {% endif %}
+{% endblock %}
