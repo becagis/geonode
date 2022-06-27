@@ -58,3 +58,9 @@ reset: down up wait sync
 hardreset: pull build reset
 
 develop: pull build up sync
+
+dev-up:
+	docker-compose -f docker-compose.yml -f docker-compose.development.yml up
+
+dev-start:
+	docker-compose exec django bash -c "python manage.py runserver 0.0.0.0:8000"

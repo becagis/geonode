@@ -1,0 +1,10 @@
+<h1>Hello World</h1>
+
+<ul>
+    {% for post in object_list %}
+        <li>
+            {{ post.title }} - {{ post.author }} ({{ post.author.last_name }}/{{ post.author.email }}) <br>
+            {{ post.body }}
+        </li>
+    {% endfor %}
+</ul>
