@@ -1,0 +1,41 @@
+{% load i18n avatar_tags %}
+{% load static from staticfiles %}
+
+
+{% block body %}
+<div class="alert alert-danger alert-dismissible" role="alert" id="ieflag" style="display:none">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+    </button>
+    <h1>{% trans "You are using an outdated browser that is not supported by GeoPortal." %}</h1>
+    <p>{% trans "Please use a <strong>modern browser</strong> like Mozilla Firefox, Google Chrome or Safari." %}</p>
+</div>
+
+<div id="wrap">
+    {% block middle %}
+    <div class="container">
+        {% include "_status_message.html" %}
+        {% include "_announcements.html" %}
+        {% include "_messages.html" %}
+        {% block body_outer %}
+        <div class="row">
+            <div class="col-md-8">
+                <div id="description">
+                    <h3>{% trans "There was a problem loading this page" %}</h3>
+                </div>
+                {% blocktrans %}
+                Please contact your GeoPortal administrator (they may have received an email automatically if they
+                configured it properly).
+                {% endblocktrans %}
+            </div>
+            <div class="col-md-4">
+                {% block sidebar %}{% endblock %}
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+    {% endblock middle %}
+</div>
+{% endblock %}
+
+
+

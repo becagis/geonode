@@ -15,7 +15,7 @@ echo "Creating autoissued certificates for HTTP host"
 if [ ! -f "/geonode-certificates/autoissued/privkey.pem" ] || [[ $(find /geonode-certificates/autoissued/privkey.pem -mtime +365 -print) ]]; then
         echo "Autoissued certificate does not exist or is too old, we generate one"
         mkdir -p "/geonode-certificates/autoissued/"
-        openssl req -x509 -nodes -days 1825 -newkey rsa:2048 -keyout "/geonode-certificates/autoissued/privkey.pem" -out "/geonode-certificates/autoissued/fullchain.pem" -subj "/CN=${HTTP_HOST:-null}" 
+        openssl req -x509 -nodes -days 1825 -newkey rsa:2048 -keyout "/geonode-certificates/autoissued/privkey.pem" -out "/geonode-certificates/autoissued/fullchain.pem" -subj "/CN=${HTTP_HOST:-null}"
 else
         echo "Autoissued certificate already exists"
 fi
@@ -46,10 +46,10 @@ fi
 echo "Replacing environement variables"
 envsubst '\$HTTP_PORT \$HTTPS_PORT \$HTTP_HOST \$HTTPS_HOST \$RESOLVER' < /etc/nginx/nginx.conf.envsubst > /etc/nginx/nginx.conf
 envsubst '\$HTTP_PORT \$HTTPS_PORT \$HTTP_HOST \$HTTPS_HOST \$RESOLVER' < /etc/nginx/nginx.https.available.conf.envsubst > /etc/nginx/nginx.https.available.conf
-envsubst '\$HTTP_PORT \$HTTPS_PORT \$HTTP_HOST \$HTTPS_HOST \$JENKINS_HTTP_PORT' < /etc/nginx/sites-enabled/geonode.conf.envsubst > /etc/nginx/sites-enabled/geonode.conf
+envsubst '\$HTTP_PORT \$HTTPS_PORT \$HTTP_HOST \$HTTPS_HOST \$JENKINS_HTTP_PORT \$GEOSERVER_UPSTREAM_HOST \$CELERY_MONITOR_UPSTREAM_HOST \$JENKINS_UPSTREAM_HOST \$DJANGO_UPSTREAM_HOST' < /etc/nginx/sites-enabled/geonode.conf.envsubst > /etc/nginx/sites-enabled/geonode.conf
 
 echo "Enabling or not https configuration"
-if [ -z "${HTTPS_HOST}" ]; then 
+if [ -z "${HTTPS_HOST}" ]; then
         echo "" > /etc/nginx/nginx.https.enabled.conf
 else
         ln -sf /etc/nginx/nginx.https.available.conf /etc/nginx/nginx.https.enabled.conf
@@ -62,5 +62,5 @@ echo "-----------------------------------------------------"
 echo "FINISHED NGINX ENTRYPOINT ---------------------------"
 echo "-----------------------------------------------------"
 
-# Run the CMD 
+# Run the CMD
 exec "$@"

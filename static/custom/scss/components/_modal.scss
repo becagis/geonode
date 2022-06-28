@@ -1,0 +1,18 @@
+.modal-header {
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+
+  .modal-title {
+    color: white;
+  }
+
+  h1 {
+    color: white;
+  }
+}
+
+
+.modal-content {
+  border-width: 0;
+  border-radius: $border-radius;
+}
