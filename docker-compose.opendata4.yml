@@ -19,8 +19,8 @@ services:
 
   celery:
     build: .
-    # volumes:
-    #   - '.:/usr/src/app'
+    volumes:
+      - '.:/usr/src/app'
     environment:
       - DEBUG=False
       - GEONODE_LB_HOST_IP=opendata.vntts.vn
