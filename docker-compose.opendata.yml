@@ -1,0 +1,37 @@
+version: '3.9'
+services:
+
+  django:
+    build: .
+    # Loading the app is defined here to allow for
+    # autoreload on changes it is mounted on top of the
+    # old copy that docker added when creating the image
+    # volumes:
+    #   - '.:/usr/src/app'
+    environment:
+      - DEBUG=False
+      - GEONODE_LB_HOST_IP=opendata.vntts.vn
+      - GEONODE_LB_PORT=80
+      - SITEURL=http://opendata.vntts.vn/
+      - ALLOWED_HOSTS=['opendata.vntts.vn', ]
+      - GEOSERVER_PUBLIC_LOCATION=http://opendata.vntts.vn/geoserver/
+      - GEOSERVER_WEB_UI_LOCATION=http://opendata.vntts.vn/geoserver/
+
+  celery:
+    build: .
+    # volumes:
+    #   - '.:/usr/src/app'
+    environment:
+      - DEBUG=False
+      - GEONODE_LB_HOST_IP=opendata.vntts.vn
+      - GEONODE_LB_PORT=80
+      - SITEURL=http://opendata.vntts.vn/
+      - ALLOWED_HOSTS=['opendata.vntts.vn', ]
+      - GEOSERVER_PUBLIC_LOCATION=http://opendata.vntts.vn/geoserver/
+      - GEOSERVER_WEB_UI_LOCATION=http://opendata.vntts.vn/geoserver/
+
+  geoserver:
+    environment:
+      - GEONODE_LB_HOST_IP=opendata.vntts.vn
+      - GEONODE_LB_PORT=80
+  #    - NGINX_BASE_URL=
