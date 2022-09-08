@@ -63,7 +63,6 @@ from gsimporter import Client
 from lxml import etree, objectify
 from owslib.etree import etree as dlxml
 from owslib.wcs import WebCoverageService
-from owslib.wms import WebMapService
 
 from geonode import GeoNodeException
 from geonode.base.models import Link
@@ -779,7 +778,8 @@ def gs_slurp(
                     cat.save(resource)
         except Exception as e:
             # Hide the resource until finished
-            layer.set_processing_state("FAILED")
+            if layer:
+                layer.set_processing_state("FAILED")
             if ignore_errors:
                 status = 'failed'
                 exception_type, error, traceback = sys.exc_info()
@@ -788,6 +788,15 @@ def gs_slurp(
                     msg = "Stopping process because --ignore-errors was not set and an error was found."
                     print(msg, file=sys.stderr)
                 raise Exception(f"Failed to process {resource.name}") from e
+        if layer is None:
+            if ignore_errors:
+                status = 'failed'
+                exception_type, error, traceback = sys.exc_info()
+            else:
+                if verbosity > 0:
+                    msg = "Stopping process because --ignore-errors was not set and an error was found."
+                    print(msg, file=sys.stderr)
+                raise Exception(f"Failed to process {resource.name}")
         else:
             if created:
                 if not permissions:
@@ -1558,13 +1567,6 @@ def fetch_gs_resource(instance, values, tries):
             return (values, None)
         gs_resource = None
     return (values, gs_resource)
-
-
-def get_wms():
-    wms_url = f"{ogc_server_settings.internal_ows}?service=WMS&request=GetCapabilities&version=1.1.0"
-    req, body = http_client.get(wms_url, user=_user)
-    _wms = WebMapService(wms_url, xml=body)
-    return _wms
 
 
 def wps_execute_layer_attribute_statistics(layer_name, field):
