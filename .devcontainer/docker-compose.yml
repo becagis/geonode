@@ -25,8 +25,19 @@ services:
     healthcheck:
       test: "echo \"I'm alive.\""
 
-    env_file:
-      - .devcontainer/.env
+#    env_file:
+#      - .devcontainer/.env
+
+    environment:
+      - IS_CELERY=False
+      - DEBUG=True
+      - DEBUG_STATIC=True
+      - MONITORING_ENABLED=False
+      - GEONODE_LB_HOST_IP=localhost
+      - GEONODE_LB_PORT=8033
+      - SITEURL=http://localhost:8033/
+      - GEOSERVER_PUBLIC_LOCATION=http://localhost:8080/geoserver/
+      - GEOSERVER_WEB_UI_LOCATION=http://localhost:8080/geoserver/
 
     volumes:
       # Update this to wherever you want VS Code to mount the folder of your project
@@ -35,7 +46,7 @@ services:
       # - /var/run/docker.sock:/var/run/docker.sock 
 
     ports:
-      - "8000:8000"
+      - "8033:8000"
       - "5678:5678"
 
     entrypoint: ["/usr/src/geonode/entrypoint.sh"]
@@ -51,14 +62,26 @@ services:
 
   celery:
     restart: "no"
-    env_file:
-      - .devcontainer/.env
+#    env_file:
+#      - .devcontainer/.env
+    environment:
+      - IS_CELERY=True
+      - DEBUG=True
+      - DEBUG_STATIC=True
+      - MONITORING_ENABLED=False
+      - GEONODE_LB_HOST_IP=localhost
+      - GEONODE_LB_PORT=8033
+      - SITEURL=http://localhost:8033/
+      - GEOSERVER_PUBLIC_LOCATION=http://localhost:8080/geoserver/
+      - GEOSERVER_WEB_UI_LOCATION=http://localhost:8080/geoserver/
 
     volumes:
       - '.:/usr/src/geonode'
 
   geonode:
     restart: "no"
+    deploy:
+      replicas: 0
 
   # Removes letsencrypt when developing
   letsencrypt:

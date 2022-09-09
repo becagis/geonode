@@ -66,7 +66,7 @@ def update(ctx):
     service_ready = False
     while not service_ready:
         try:
-            socket.gethostbyname('geonode')
+            socket.gethostbyname(os.environ.get('GEONODE_CONTAINER', 'geonode')) # @becagis
             service_ready = True
         except Exception:
             time.sleep(10)
@@ -86,7 +86,7 @@ def update(ctx):
     envs = {
         "local_settings": str(_localsettings()),
         "siteurl": os.environ.get('SITEURL', siteurl),
-        "geonode_docker_host": str(socket.gethostbyname('geonode')),
+        "geonode_docker_host": str(socket.gethostbyname(os.environ.get('GEONODE_CONTAINER', 'geonode'))), # @becagis
         "public_protocol": pub_protocol,
         "public_fqdn": str(pub_ip) + str(f':{pub_port}' if pub_port else ''),
         "public_host": str(pub_ip),
@@ -483,11 +483,11 @@ def _prepare_monitoring_fixture():
     pub_port = _geonode_public_port()
     print(f"Public PORT is {pub_port}")
     try:
-        geonode_ip = socket.gethostbyname('geonode')
+        geonode_ip = socket.gethostbyname(os.environ.get('GEONODE_CONTAINER', 'geonode')) # @becagis
     except Exception:
         geonode_ip = pub_ip
     try:
-        geoserver_ip = socket.gethostbyname('geoserver')
+        geoserver_ip = socket.gethostbyname(os.environ.get('GEOSERVER_CONTAINER', 'geoserver')) # @becagis
     except Exception:
         geoserver_ip = pub_ip
     d = '1970-01-01 00:00:00'
