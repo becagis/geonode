@@ -34,6 +34,8 @@ services:
       - IS_CELERY=False
     entrypoint: ["/usr/src/geonode/entrypoint.sh"]
     command: "uwsgi --ini /usr/src/geonode/uwsgi.ini"
+    extra_hosts:
+      - dockerhost:host-gateway
 
   # Celery worker that executes celery tasks created by Django.
   celery:
@@ -68,10 +70,6 @@ services:
       - nginx-certificates:/geonode-certificates
       - statics:/mnt/volumes/statics
     restart: on-failure
-    extra_hosts:
-      - dockerhost:host-gateway
-#    networks:
-#      - npm_network
 
   # Gets and installs letsencrypt certificates
   letsencrypt:
@@ -161,7 +159,3 @@ volumes:
     name: ${COMPOSE_PROJECT_NAME}-tmp
   rabbitmq:
     name: ${COMPOSE_PROJECT_NAME}-rabbitmq
-
-#networks:
-#  npm_network:
-#    external: true
