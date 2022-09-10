@@ -42,6 +42,7 @@ services:
       - HTTP_HOST=geoportal-uat.vntts.vn
     networks:
      - geoportal33_net
+     - npm_network
 
   geoserver:
     environment:
