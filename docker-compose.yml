@@ -68,6 +68,8 @@ services:
       - nginx-certificates:/geonode-certificates
       - statics:/mnt/volumes/statics
     restart: on-failure
+    extra_hosts:
+      - dockerhost:host-gateway
 #    networks:
 #      - npm_network
 
