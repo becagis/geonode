@@ -60,6 +60,9 @@ services:
 networks:
   geoportal33_net:
 
+  npm_network:
+    external: true
+    
   geonode_db_shared:
     external: true
   
