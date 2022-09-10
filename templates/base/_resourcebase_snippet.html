@@ -28,7 +28,7 @@
                   <a href="{{ item.detail_url }}">{{ item.title }}</a>
                 </h4>
 
-                <p class="item-meta flex mt-0 gap-4">
+                <p class="item-meta flex mt-0 gap-4" ng-if="item.category__gn_description">
                   <span class="item-category">{{ item.category__gn_description }}</span><br>
                   <span class="item-category" ng-if="item.group"><a href="{{ item.site_url }}groups/group/{{ item.group }}/activity/"><i class="fa fa-group" aria-hidden="true" style="margin-right: 8px;"></i>{{ item.group_name }}</a><br></span>
                   <span class="item-category" ng-if="item.has_time">
