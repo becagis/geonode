@@ -68,8 +68,8 @@ services:
       - nginx-certificates:/geonode-certificates
       - statics:/mnt/volumes/statics
     restart: on-failure
-    networks:
-      - npm_network
+#    networks:
+#      - npm_network
 
   # Gets and installs letsencrypt certificates
   letsencrypt:
@@ -160,6 +160,6 @@ volumes:
   rabbitmq:
     name: ${COMPOSE_PROJECT_NAME}-rabbitmq
 
-networks:
-  npm_network:
-    external: true
+#networks:
+#  npm_network:
+#    external: true
