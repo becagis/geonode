@@ -19,6 +19,7 @@ services:
       - GEOSERVER_WEB_UI_LOCATION=https://geoportal-uat.vntts.vn/geoserver/
     networks:
       - geonode_db_shared
+      - geoportal33_net
 
   celery:
     build: .
@@ -34,10 +35,13 @@ services:
       - GEOSERVER_WEB_UI_LOCATION=https://geoportal-uat.vntts.vn/geoserver/
     networks:
       - geonode_db_shared
+      - geoportal33_net
 
   geonode:
     environment:
       - HTTP_HOST=geoportal-uat.vntts.vn
+    networks:
+     - geoportal33_net
 
   geoserver:
     environment:
@@ -46,7 +50,15 @@ services:
   #    - NGINX_BASE_URL=
     networks:
       - geonode_db_shared
+      - geoportal33_net
+
+  rabbitmq:
+    networks:
+      - geoportal33_net
 
 networks:
+  geoportal33_net:
+
   geonode_db_shared:
     external: true
+  
