@@ -31,6 +31,10 @@ services:
       - GEOSERVER_PUBLIC_LOCATION=https://geoportal-uat.vntts.vn/geoserver/
       - GEOSERVER_WEB_UI_LOCATION=https://geoportal-uat.vntts.vn/geoserver/
 
+  geonode:
+    environment:
+      - HTTP_HOST=geoportal-uat.vntts.vn
+
   geoserver:
     environment:
       - GEONODE_LB_HOST_IP=https://geoportal-uat.vntts.vn
