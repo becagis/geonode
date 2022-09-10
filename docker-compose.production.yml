@@ -17,6 +17,8 @@ services:
       - ALLOWED_HOSTS=['*', ]
       - GEOSERVER_PUBLIC_LOCATION=https://geoportal-uat.vntts.vn/geoserver/
       - GEOSERVER_WEB_UI_LOCATION=https://geoportal-uat.vntts.vn/geoserver/
+    networks:
+      - geonode_db_shared
 
   celery:
     build: .
@@ -30,6 +32,8 @@ services:
       - ALLOWED_HOSTS=['*', ]
       - GEOSERVER_PUBLIC_LOCATION=https://geoportal-uat.vntts.vn/geoserver/
       - GEOSERVER_WEB_UI_LOCATION=https://geoportal-uat.vntts.vn/geoserver/
+    networks:
+      - geonode_db_shared
 
   geonode:
     environment:
@@ -40,3 +44,9 @@ services:
       - GEONODE_LB_HOST_IP=https://geoportal-uat.vntts.vn
       - GEONODE_LB_PORT=80
   #    - NGINX_BASE_URL=
+    networks:
+      - geonode_db_shared
+
+networks:
+  geonode_db_shared:
+    external: true
