@@ -62,7 +62,7 @@ services:
       - GEOSERVER_UPSTREAM_HOST=geoserver
     ports:
       - "${HTTP_PORT}:${HTTP_PORT}"
-      - "${HTTPS_PORT}:${HTTPS_PORT}"
+      # - "${HTTPS_PORT}:${HTTPS_PORT}"
     volumes:
       - nginx-confd:/etc/nginx
       - nginx-certificates:/geonode-certificates
