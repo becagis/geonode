@@ -11,7 +11,7 @@ services:
       - '.:/usr/src/app'
     environment:
       - DEBUG=False
-      - GEONODE_LB_HOST_IP=https://geoportal-uat.vntts.vn
+      - GEONODE_LB_HOST_IP=geoportal-uat.vntts.vn
       - GEONODE_LB_PORT=80
       - SITEURL=https://geoportal-uat.vntts.vn/
       - ALLOWED_HOSTS=['*', ]
@@ -27,7 +27,7 @@ services:
       - '.:/usr/src/app'
     environment:
       - DEBUG=False
-      - GEONODE_LB_HOST_IP=https://geoportal-uat.vntts.vn
+      - GEONODE_LB_HOST_IP=geoportal-uat.vntts.vn
       - GEONODE_LB_PORT=80
       - SITEURL=https://geoportal-uat.vntts.vn/
       - ALLOWED_HOSTS=['*', ]
@@ -46,7 +46,7 @@ services:
 
   geoserver:
     environment:
-      - GEONODE_LB_HOST_IP=https://geoportal-uat.vntts.vn
+      - GEONODE_LB_HOST_IP=geoportal-uat.vntts.vn
       - GEONODE_LB_PORT=80
   #    - NGINX_BASE_URL=
     networks:
