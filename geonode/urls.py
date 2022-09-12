@@ -185,6 +185,10 @@ urlpatterns += [
     url(r'^tinymce/', include('tinymce.urls')),
 ]
 
+urlpatterns += [
+    url(r'^api/becagis/', include('geonode.becagis.urls')),
+]
+
 if settings.GEONODE_APPS_ENABLE:
     urlpatterns += [url(r'^apps/', include('geonode.geoapps.urls'))]
 
