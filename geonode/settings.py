@@ -2244,3 +2244,6 @@ EXTRA_METADATA_SCHEMA = {**{
 ADMIN_SITE_HEADER = os.getenv('ADMIN_SITE_HEADER', 'GeoPortal Admin')
 ADMIN_SITE_TITLE = os.getenv('ADMIN_SITE_TITLE', 'GeoPortal Admin Portal')
 ADMIN_INDEX_TITLE = os.getenv('ADMIN_INDEX_TITLE', 'Welcome to GeoPortal')
+
+
+from .ldap_settings import *

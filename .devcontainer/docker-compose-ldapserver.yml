@@ -1,0 +1,219 @@
+version: '3.4'
+
+# Common Django template for GeoNode and Celery services below
+x-common-django:
+  &default-common-django
+  #image: becamexidc2020/geoportal_django:3.3.3
+  image: becamexidc2020/geoportal_django:3.3.2
+  restart: on-failure
+  env_file:
+    - .env
+  volumes:
+    - '.:/usr/src/geonode'
+    - statics:/mnt/volumes/statics
+    - geoserver-data-dir:/geoserver_data/data
+    - backup-restore:/backup_restore
+    - data:/data
+    - tmp:/tmp
+
+services:
+  openldap:
+    image: osixia/openldap:1.5.0
+    container_name: openldap
+    environment:
+      LDAP_LOG_LEVEL: "256"
+      LDAP_ORGANISATION: "Example Inc."
+      LDAP_DOMAIN: "example.org"
+      LDAP_BASE_DN: ""
+      LDAP_ADMIN_PASSWORD: "admin"
+      LDAP_CONFIG_PASSWORD: "config"
+      LDAP_READONLY_USER: "false"
+      #cn=admin,dc=example,dc=org - admin
+      #LDAP_READONLY_USER_USERNAME: "readonly"
+      #LDAP_READONLY_USER_PASSWORD: "readonly"
+      LDAP_RFC2307BIS_SCHEMA: "false"
+      LDAP_BACKEND: "mdb"
+      LDAP_TLS: "true"
+      LDAP_TLS_CRT_FILENAME: "ldap.crt"
+      LDAP_TLS_KEY_FILENAME: "ldap.key"
+      LDAP_TLS_DH_PARAM_FILENAME: "dhparam.pem"
+      LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
+      LDAP_TLS_ENFORCE: "false"
+      LDAP_TLS_CIPHER_SUITE: "SECURE256:-VERS-SSL3.0"
+      LDAP_TLS_VERIFY_CLIENT: "demand"
+      LDAP_REPLICATION: "false"
+      #LDAP_REPLICATION_CONFIG_SYNCPROV: 'binddn="cn=admin,cn=config" bindmethod=simple credentials="$$LDAP_CONFIG_PASSWORD" searchbase="cn=config" type=refreshAndPersist retry="60 +" timeout=1 starttls=critical'
+      #LDAP_REPLICATION_DB_SYNCPROV: 'binddn="cn=admin,$$LDAP_BASE_DN" bindmethod=simple credentials="$$LDAP_ADMIN_PASSWORD" searchbase="$$LDAP_BASE_DN" type=refreshAndPersist interval=00:00:00:10 retry="60 +" timeout=1 starttls=critical'
+      #LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap.example.org','ldap://ldap2.example.org']"
+      KEEP_EXISTING_CONFIG: "false"
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: "true"
+      LDAP_SSL_HELPER_PREFIX: "ldap"
+    tty: true
+    stdin_open: true
+    volumes:
+      - /var/lib/ldap
+      - /etc/ldap/slapd.d
+      - /container/service/slapd/assets/certs/
+    ports:
+      - "389:389"
+      - "636:636"
+    # For replication to work correctly, domainname and hostname must be
+    # set correctly so that "hostname"."domainname" equates to the
+    # fully-qualified domain name for the host.
+    domainname: "example.org"
+    hostname: "ldap-server"
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "openldap"
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - "9090:80"
+    depends_on:
+      - openldap
+  # Our custom django application. It includes Geonode.
+  django:
+    << : *default-common-django
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: django4${COMPOSE_PROJECT_NAME}
+    healthcheck:
+      test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null http://127.0.0.1:8000/"
+      interval: 60s
+      timeout: 10s
+      retries: 1
+      start_period: 60s
+    environment:
+      - IS_CELERY=False
+    ports:
+      - "8888:8888"
+      - "5678:5678"
+    entrypoint: ["/usr/src/geonode/entrypoint.sh"]
+    command: "uwsgi --ini /usr/src/geonode/uwsgi.ini"
+    extra_hosts:
+      - dockerhost:host-gateway
+
+  # Celery worker that executes celery tasks created by Django.
+  celery:
+    << : *default-common-django
+    container_name: celery4${COMPOSE_PROJECT_NAME}
+    depends_on:
+      - django
+    environment:
+      - IS_CELERY=True
+    entrypoint: ["/usr/src/geonode/entrypoint.sh"]
+    command: "celery-cmd"
+
+  # Nginx is serving django static and media files and proxies to django and geonode
+  geonode:
+    image: geonode/nginx:3.3.2
+    build: ./scripts/docker/nginx/
+    container_name: nginx4${COMPOSE_PROJECT_NAME}
+    environment:
+      - HTTPS_HOST=${HTTPS_HOST}
+      - HTTP_HOST=${HTTP_HOST}
+      - HTTPS_PORT=${HTTPS_PORT}
+      - HTTP_PORT=${HTTP_PORT}
+      - LETSENCRYPT_MODE=${LETSENCRYPT_MODE}
+      - RESOLVER=127.0.0.11
+      - DJANGO_UPSTREAM_HOST=django
+      - GEOSERVER_UPSTREAM_HOST=geoserver
+    ports:
+      - "${HTTP_PORT}:${HTTP_PORT}"
+      # - "${HTTPS_PORT}:${HTTPS_PORT}"
+    volumes:
+      - nginx-confd:/etc/nginx
+      - nginx-certificates:/geonode-certificates
+      - statics:/mnt/volumes/statics
+    restart: on-failure
+
+  # Gets and installs letsencrypt certificates
+  letsencrypt:
+    image: geonode/letsencrypt-3.3.2
+    build: ./scripts/docker/letsencrypt/
+    container_name: letsencrypt4${COMPOSE_PROJECT_NAME}
+    environment:
+      - HTTPS_HOST=${HTTPS_HOST}
+      - HTTP_HOST=${HTTP_HOST}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - LETSENCRYPT_MODE=${LETSENCRYPT_MODE}
+    volumes:
+      - nginx-certificates:/geonode-certificates
+    restart: on-failure
+
+  # Geoserver backend
+  geoserver:
+    image: geonode/geoserver:2.19.6
+    container_name: geoserver4${COMPOSE_PROJECT_NAME}
+    healthcheck:
+      test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null http://127.0.0.1:8080/geoserver/rest/workspaces/geonode.html"
+      interval: 60s
+      timeout: 10s
+      retries: 1
+      start_period: 60s    
+    env_file:
+      - .env
+    volumes:
+      - statics:/mnt/volumes/statics
+      - geoserver-data-dir:/geoserver_data/data
+      - backup-restore:/backup_restore
+      - data:/data
+      - tmp:/tmp
+    restart: on-failure
+    # ports:
+    #   - "8080:8080"
+
+  data-dir-conf:
+    image: geonode/geoserver_data:2.19.6
+    container_name: gsconf4${COMPOSE_PROJECT_NAME}
+    command: /bin/true
+    volumes:
+      - geoserver-data-dir:/geoserver_data/data
+    restart: on-failure
+
+  # PostGIS database.
+  db:
+    # use geonode official postgis 13 image
+    image: geonode/postgis:13
+    container_name: db4${COMPOSE_PROJECT_NAME}
+    env_file:
+      - .env
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - dbbackups:/pg_backups
+    restart: on-failure
+    # uncomment to enable remote connections to postgres
+    #ports:
+    #  - "5432:5432"
+
+  # Vanilla RabbitMQ service. This is needed by celery
+  rabbitmq:
+    image: rabbitmq:3.7-alpine
+    container_name: rabbitmq4${COMPOSE_PROJECT_NAME}
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    restart: on-failure
+
+volumes:
+  statics:
+    name: ${COMPOSE_PROJECT_NAME}-statics
+  nginx-confd:
+    name: ${COMPOSE_PROJECT_NAME}-nginxconfd
+  nginx-certificates:
+    name: ${COMPOSE_PROJECT_NAME}-nginxcerts
+  geoserver-data-dir:
+    name: ${COMPOSE_PROJECT_NAME}-gsdatadir
+  dbdata:
+    name: ${COMPOSE_PROJECT_NAME}-dbdata
+  dbbackups:
+    name: ${COMPOSE_PROJECT_NAME}-dbbackups
+  backup-restore:
+    name: ${COMPOSE_PROJECT_NAME}-backup-restore
+  data:
+    name: ${COMPOSE_PROJECT_NAME}-data
+  tmp:
+    name: ${COMPOSE_PROJECT_NAME}-tmp
+  rabbitmq:
+    name: ${COMPOSE_PROJECT_NAME}-rabbitmq
