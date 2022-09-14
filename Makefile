@@ -69,6 +69,9 @@ prod-up:
 prod-down:
 	docker-compose down
 
+prod-publish:
+	docker-compose push django
+
 dev-up:
 	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml up
 	
