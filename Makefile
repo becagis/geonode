@@ -60,19 +60,34 @@ hardreset: pull build reset
 develop: pull build up sync
 
 # @becagis
+prod-pull:
+	docker-compose pull
+
 prod-up:
-	docker-compose up
+	docker-compose up -d
 
 prod-down:
 	docker-compose down
 
 dev-up:
 	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml up
-
+	
 dev-start:
+	docker-compose exec django bash -c "python manage.py runserver 0.0.0.0:8000"
+
+dev-up-start:
+	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml up -d
 	docker-compose exec django bash -c "python manage.py runserver 0.0.0.0:8000"
 
 dev-down:
 	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml down
 
+prod-ldap-up:
+	docker-compose -f docker-compose.yml -f docker-compose-ldap-server.yml up
 
+prod-ldap-down:
+	docker-compose -f docker-compose.yml -f docker-compose-ldap-server.yml down
+
+dev-ldap-up-start:
+	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml -f docker-compose-ldap-server.yml up -d
+	docker-compose exec django bash -c "python manage.py runserver 0.0.0.0:8000"
