@@ -60,37 +60,53 @@ hardreset: pull build reset
 develop: pull build up sync
 
 # @becagis
+## PROD ----------------------------------------------------------------------------
 prod-pull:
 	docker-compose pull
 
 prod-up:
+	docker-compose up
+
+prod-up-daemon:
 	docker-compose up -d
 
 prod-down:
 	docker-compose down
 
+prod-exec:
+	docker-compose exec django bash
+
 prod-publish:
 	docker-compose push django
 
-dev-up:
-	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml up
-	
-dev-start:
-	docker-compose exec django bash -c "python manage.py runserver 0.0.0.0:8000"
-
-dev-up-start:
-	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml up -d
-	docker-compose exec django bash -c "python manage.py runserver 0.0.0.0:8000"
-
-dev-down:
-	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml down
-
+## LDAP
 prod-ldap-up:
 	docker-compose -f docker-compose.yml -f docker-compose-ldap-server.yml up
 
 prod-ldap-down:
 	docker-compose -f docker-compose.yml -f docker-compose-ldap-server.yml down
 
-dev-ldap-up-start:
+prod-ldap-exec:
+	docker-compose -f docker-compose.yml -f docker-compose-ldap-server.yml exec django bash
+
+## DEV ----------------------------------------------------------------------------
+dev-up:
+	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml up -d
+	docker-compose exec django bash -c "python manage.py runserver 0.0.0.0:8000"
+
+dev-down:
+	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml down
+
+dev-exec:
+	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml exec django bash
+
+## LDAP
+dev-ldap-up:
 	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml -f docker-compose-ldap-server.yml up -d
 	docker-compose exec django bash -c "python manage.py runserver 0.0.0.0:8000"
+
+dev-ldap-down:
+	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml -f docker-compose-ldap-server.yml down
+
+dev-ldap-exec:
+	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml -f docker-compose-ldap-server.yml exec django bash
