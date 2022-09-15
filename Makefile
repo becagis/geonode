@@ -81,32 +81,32 @@ prod-publish:
 
 ## LDAP
 prod-ldap-up:
-	docker-compose -f docker-compose.yml -f docker-compose-ldap-server.yml up
+	docker-compose --project-name geonode-ldap -f docker-compose.yml -f docker-compose-ldap-server.yml up
 
 prod-ldap-down:
-	docker-compose -f docker-compose.yml -f docker-compose-ldap-server.yml down
+	docker-compose --project-name geonode-ldap -f docker-compose.yml -f docker-compose-ldap-server.yml down
 
 prod-ldap-exec:
-	docker-compose -f docker-compose.yml -f docker-compose-ldap-server.yml exec django bash
+	docker-compose --project-name geonode-ldap -f docker-compose.yml -f docker-compose-ldap-server.yml exec django bash
 
 ## DEV ----------------------------------------------------------------------------
 dev-up:
-	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml up -d
-	docker-compose exec django bash -c "python manage.py runserver 0.0.0.0:8000"
+	docker-compose --project-name geonode-dev -f docker-compose.yml -f .devcontainer/docker-compose.yml up -d
+	docker-compose --project-name geonode-dev exec django bash -c "python manage.py runserver 0.0.0.0:8000"
 
 dev-down:
-	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml down
+	docker-compose --project-name geonode-dev -f docker-compose.yml -f .devcontainer/docker-compose.yml down
 
 dev-exec:
-	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml exec django bash
+	docker-compose --project-name geonode-dev -f docker-compose.yml -f .devcontainer/docker-compose.yml exec django bash
 
 ## LDAP
 dev-ldap-up:
-	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml -f docker-compose-ldap-server.yml up -d
-	docker-compose exec django bash -c "python manage.py runserver 0.0.0.0:8000"
+	docker-compose --project-name geonode-ldap-dev -f docker-compose.yml -f .devcontainer/docker-compose.yml -f docker-compose-ldap-server.yml up -d
+	docker-compose --project-name geonode-ldap-dev exec django bash -c "python manage.py runserver 0.0.0.0:8000"
 
 dev-ldap-down:
-	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml -f docker-compose-ldap-server.yml down
+	docker-compose --project-name geonode-ldap-dev -f docker-compose.yml -f .devcontainer/docker-compose.yml -f docker-compose-ldap-server.yml down
 
 dev-ldap-exec:
-	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml -f docker-compose-ldap-server.yml exec django bash
+	docker-compose --project-name geonode-ldap-dev -f docker-compose.yml -f .devcontainer/docker-compose.yml -f docker-compose-ldap-server.yml exec django bash
