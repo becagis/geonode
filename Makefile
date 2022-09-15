@@ -77,6 +77,7 @@ prod-exec:
 	docker-compose exec django bash
 
 prod-publish:
+	docker-compose build django
 	docker-compose push django
 
 ## LDAP
