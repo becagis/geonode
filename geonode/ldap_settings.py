@@ -16,8 +16,11 @@ ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_NEVER )
 
 # django_auth_ldap configuration
 AUTH_LDAP_SERVER_URI = os.getenv("LDAP_SERVER_URL")
-AUTH_LDAP_BIND_DN = os.getenv("LDAP_BIND_DN")
-AUTH_LDAP_BIND_PASSWORD = os.getenv("LDAP_BIND_PASSWORD")
+ldap_bind_dn = os.getenv("LDAP_BIND_DN", default="none")
+if (ldap_bind_dn != "none"):
+    AUTH_LDAP_BIND_DN = os.getenv("LDAP_BIND_DN")
+    AUTH_LDAP_BIND_PASSWORD = os.getenv("LDAP_BIND_PASSWORD")
+
 AUTH_LDAP_USER_SEARCH = ldap_config.LDAPSearch(
     os.getenv("LDAP_USER_SEARCH_DN"),
     ldap.SCOPE_SUBTREE,
