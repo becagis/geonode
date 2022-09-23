@@ -816,6 +816,7 @@ if 'announcements' in INSTALLED_APPS:
     )
 
 OAUTH2_PROVIDER = {
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 172800, # @becagis
     'SCOPES': {
         'openid': 'Default to OpenID',
         'read': 'Read scope',
