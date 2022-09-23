@@ -12,7 +12,11 @@
 {% endblock %}
 
 {% block extra_head %}
-    <link href="{{ STATIC_URL }}custom/scss/site_base.css" rel="stylesheet"/>
+    {% if STATIC_URL and STATIC_URL.strip %}
+        <link href="{{ STATIC_URL }}custom/scss/site_base.css" rel="stylesheet"/>
+    {% else %}
+        <link href="/static/custom/scss/site_base.css" rel="stylesheet"/>
+    {% endif %}
 {% endblock %}
 
 
