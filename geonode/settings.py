@@ -760,7 +760,7 @@ TEMPLATES = [
 ]
 
 MIDDLEWARE = (
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -816,6 +816,7 @@ if 'announcements' in INSTALLED_APPS:
     )
 
 OAUTH2_PROVIDER = {
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 172800, # @becagis
     'SCOPES': {
         'openid': 'Default to OpenID',
         'read': 'Read scope',
