@@ -1567,13 +1567,48 @@ if GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY == 'mapstore':
         MAPSTORE_CATALOGUE_SELECTED_SERVICE = list(list(GEONODE_CATALOGUE_SERVICE.keys()))[0]
 
     DEFAULT_MS2_BACKGROUNDS = [
+        # @becagis
+         {
+            "type": "tileprovider",
+            "title": "Google Maps",
+            "provider": "custom",
+            "name": "google-maps",
+            "group": "background",
+            "visibility": True,
+            "thumbURL": f"{SITEURL}static/custom/img/google-maps.jpg",
+            "url": "http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
+            "options": {
+                "subdomains": [ "mt0", "mt1", "mt2", "mt3"]
+            }
+        }, {
+            "type": "tileprovider",
+            "title": "Google Satellite",
+            "provider": "custom",
+            "name": "google-satellite",
+            "group": "background",
+            "visibility": False,
+            "thumbURL": f"{SITEURL}static/custom/img/google-satellite.jpg",
+            "url": "http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+            "options": {
+                "subdomains": [ "mt0", "mt1", "mt2", "mt3"]
+            }
+        }, {
+            "type": "tileprovider",
+            "title": "BecaGIS OSM",
+            "provider": "custom",
+            "name": "becagis-maps",
+            "group": "background",
+            "visibility": False,
+            "thumbURL": f"{SITEURL}static/custom/img/vietnam-osm.jpg",
+            "url": "https://thuduc-maps.hcmgis.vn/thuducserver/gwc/service/wmts?layer=thuduc:thuduc_maps&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}"
+        },
         {
             "type": "osm",
             "title": "Open Street Map",
             "name": "mapnik",
             "source": "osm",
             "group": "background",
-            "visibility": True
+            "visibility": False
         }, {
             "type": "tileprovider",
             "title": "OpenTopoMap",
@@ -2079,21 +2114,23 @@ THUMBNAIL_SIZE = {
 
 THUMBNAIL_BACKGROUND = {
     # class generating thumbnail's background
-    'class': 'geonode.thumbs.background.WikiMediaTileBackground',
+    # 'class': 'geonode.thumbs.background.WikiMediaTileBackground',
     # 'class': 'geonode.thumbs.background.OSMTileBackground',
     # 'class': 'geonode.thumbs.background.GenericXYZBackground',
     # initialization parameters for generator instance, valid only for generic classes
-    'options': {
-        # 'url': URL for the generic xyz / tms service
-        # 'tms': False by default. Set to True if the service is TMS
-        # 'tile_size': tile size for the generic xyz service, default is 256
-    },
-    # example options for a TMS service
-    # 'class': 'geonode.thumbs.background.GenericXYZBackground',
     # 'options': {
-    #    'url': 'http://maps.geosolutionsgroup.com/geoserver/gwc/service/tms/1.0.0/osm%3Aosm_simple_light@EPSG%3A900913@png/{z}/{x}/{y}.png',
-    #    'tms': True
+    #     # 'url': URL for the generic xyz / tms service
+    #     # 'tms': False by default. Set to True if the service is TMS
+    #     # 'tile_size': tile size for the generic xyz service, default is 256
     # },
+    # example options for a TMS service
+
+    # @becagis
+    'class': 'geonode.thumbs.background.GenericXYZBackground',
+    'options': {
+       'url': 'https://mt2.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+       'tms': False
+    },
 }
 
 # define the urls after the settings are overridden
