@@ -299,7 +299,7 @@ def save_step(user, layer, spatial_files, overwrite=True, store_spatial_files=Tr
                     msg = "Please upload only one type of file at a time"
                     logger.exception(Exception(msg))
                     raise UploadException(msg)
-            name = get_valid_layer_name(layer, overwrite)
+            name = get_valid_layer_name(layer, False)
             _log(f'Name for layer: {name}')
             if not any(spatial_files.all_files()):
                 msg = "Unable to recognize the uploaded file(s)"
