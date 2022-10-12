@@ -36,12 +36,11 @@
 
         <div class="nav-container container">
             <div class="navbar-header">
-                <div style="margin: 0 15px">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <i class="fa fa-navicon fa-lg"></i>
-                    </button>
-                    <a class="navbar-brand" href="{% url "home" %}">GeoPortal</a>
-                </div>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <i class="fa fa-navicon fa-lg"></i>
+                </button>
+                <a class="navbar-brand" href="{% url "home" %}">GeoPortal</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav toolbar">
@@ -145,8 +144,7 @@
                                     </li>
                                 {% endif %}
                                 {% if user.is_superuser and not READ_ONLY_MODE %}
-                                    <li><a href="
-                                            {% if SITEURL|default:""|slice:"-1:" == "/" %}{{ SITEURL }}{% else %}{{ SITEURL }}/{% endif %}admin/people/profile/add/">{% trans "Add User" %}</a>
+                                    <li><a href="{% if SITEURL|default:""|slice:"-1:" == "/" %}{{ SITEURL }}{% else %}{{ SITEURL }}/{% endif %}admin/people/profile/add/">{% trans "Add User" %}</a>
                                     </li>
                                     <li><a href="{% url "group_create" %}">{% trans "Create Group" %}</a></li>
                                 {% endif %}
@@ -217,8 +215,7 @@
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url "help" %}">{% trans "Help" %}</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="
-                                        {% if SITEURL|default:""|slice:"-1:" == "/" %}{{ SITEURL }}{% else %}{{ SITEURL }}/{% endif %}account/logout/">{% trans "Log out" %}</a>
+                                <li><a href="{% if SITEURL|default:""|slice:"-1:" == "/" %}{{ SITEURL }}{% else %}{{ SITEURL }}/{% endif %}account/logout/">{% trans "Log out" %}</a>
                                 </li>
                             </ul>
                         </li>
@@ -288,7 +285,6 @@
                         {% endif %}
                         {% if user.is_superuser and not READ_ONLY_MODE %}
                             <li><a href="
-
                                     {% if SITEURL|default:""|slice:"-1:" == "/" %}{{ SITEURL }}{% else %}{{ SITEURL }}/{% endif %}admin/people/profile/add/">{% trans "Add User" %}</a>
                             </li>
                             <li><a href="{% url "group_create" %}">{% trans "Create Group" %}</a></li>
