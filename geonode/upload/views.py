@@ -715,6 +715,7 @@ def view(req, step=None):
         step = 'save'
         # delete existing session
         if upload_id and upload_id in req.session:
+            return error_response(req, errors="test5")
             del req.session[upload_id]
             req.session.modified = True
     else:
@@ -748,6 +749,7 @@ def view(req, step=None):
                 logger.exception(e)
                 return error_response(req, errors=e.args)
         resp = _steps[step](req, upload_session)
+        return error_response(req, errors="test1")
         resp_js = None
         if resp:
             content = resp.content
