@@ -1220,7 +1220,7 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
                                 _step
                             )
                             if response.status_code != 200:
-                                out['test'] = 4
+                                out['test'] = response.status_code
                                 raise Exception(response.content)
                         else:
                             logger.error("starting final step for Replace Layer")
