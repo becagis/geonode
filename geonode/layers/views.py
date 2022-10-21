@@ -1187,6 +1187,7 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
                 data_retriever = form.cleaned_data["data_retriever"]
                 base_file = data_retriever.get("base_file").get_path(allow_transfer=False)
                 files = {_file.split('.')[1]: _file for _file in data_retriever.file_paths.values()}
+                out['test'] = 1
                 if '.zip' in base_file:
                     files, _tmpdir = get_files(base_file)
 
@@ -1204,11 +1205,13 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
                 resource_is_valid = validate_input_source(
                     layer=layer, filename=base_file, files=files, action_type="replace"
                 )
+                out['test'] = 2
                 data_retriever.delete_files()
                 if resource_is_valid:
                     # Create a new upload session
                     request.GET = {"layer_id": layer.id}
                     steps = [None, "check", "final"] if layer.is_vector() and settings.ASYNC_SIGNALS else [None, "final"]
+                    out['test'] = 3
                     for _step in steps:
                         if _step != 'final' or (_step == 'final' and not settings.ASYNC_SIGNALS):
                             response, cat, valid = UploadViewSet()._emulate_client_upload_step(
@@ -1233,7 +1236,6 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
                 logger.exception(e)
                 out['success'] = False
                 out['errors'] = str(e)
-                out['test'] = '1'
             finally:
                 if _tmpdir is not None:
                     shutil.rmtree(_tmpdir, ignore_errors=True)
