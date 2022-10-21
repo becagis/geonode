@@ -1214,11 +1214,13 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
                     out['test'] = 3
                     for _step in steps:
                         if _step != 'final' or (_step == 'final' and not settings.ASYNC_SIGNALS):
+                            out['test'] = 5
                             response, cat, valid = UploadViewSet()._emulate_client_upload_step(
                                 request,
                                 _step
                             )
                             if response.status_code != 200:
+                                out['test'] = 4
                                 raise Exception(response.content)
                         else:
                             logger.error("starting final step for Replace Layer")
