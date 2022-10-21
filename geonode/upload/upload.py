@@ -316,6 +316,7 @@ def save_step(user, layer, spatial_files, overwrite=True, store_spatial_files=Tr
             files_to_upload = preprocess_files(spatial_files)
             _log(f"files_to_upload: {files_to_upload}")
             _log(f'Uploading {the_layer_type}')
+            _log(name)
             error_msg = None
             try:
                 upload = None
@@ -384,6 +385,7 @@ def save_step(user, layer, spatial_files, overwrite=True, store_spatial_files=Tr
                     else:
                         if overwrite:
                             gs_layer = gs_catalog.get_layer(name)
+                            raise SystemExit
                             _target_store = (
                                 gs_layer.resource.store.name
                                 if not isinstance(gs_layer.resource, list)
@@ -417,6 +419,7 @@ def save_step(user, layer, spatial_files, overwrite=True, store_spatial_files=Tr
                                 name=name,
                                 charset_encoding=charset_encoding
                             )
+                            _log(target_store)
                             if ogc_server_settings.datastore_db and any(map(is_vector, files_to_upload)):
                                 target = create_geoserver_db_featurestore(
                                     # store_name=ogc_server_settings.DATASTORE,
