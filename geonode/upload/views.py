@@ -701,7 +701,8 @@ def view(req, step=None):
 
     upload_session = None
     upload_id = req.GET.get('id', None)
-
+    
+    print("testesssssssssssssssssssssssss")
     if step is None:
         if upload_id:
             # upload recovery
