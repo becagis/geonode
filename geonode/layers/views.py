@@ -1249,6 +1249,7 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
             register_event(request, 'change', layer)
         else:
             status_code = 400
+        out['test'] = 'testerror'
 
         if _tmpdir is not None:
             shutil.rmtree(_tmpdir, ignore_errors=True)
