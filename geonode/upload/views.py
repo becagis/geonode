@@ -704,7 +704,6 @@ def view(req, step=None):
     
     if step is None:
         if upload_id:
-            return error_response(req, errors="test1")
             # upload recovery
             upload_obj = get_object_or_404(
                 Upload,
@@ -714,10 +713,9 @@ def view(req, step=None):
             if session:
                 return next_step_response(req, session)
         step = 'save'
-        
+        return error_response(req, errors="test1")
         # delete existing session
         if upload_id and upload_id in req.session:
-            return error_response(req, errors="test2")
             del req.session[upload_id]
             req.session.modified = True
     else:
@@ -750,10 +748,9 @@ def view(req, step=None):
             except Exception as e:
                 logger.exception(e)
                 return error_response(req, errors=e.args)
-
+        return error_response(req, errors="test2")
         resp = _steps[step](req, upload_session)
         resp_js = None
-        return error_response(req, errors="test3")
         if resp:
             content = resp.content
             if isinstance(content, bytes):
