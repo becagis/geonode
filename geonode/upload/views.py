@@ -800,10 +800,11 @@ def view(req, step=None):
         return error_response(req, errors=errors)
     except gsimporter.BadRequest as e:
         logger.exception(e)
-        raise SystemExit
+        
         return error_response(req, errors=e.args)
     except Exception as e:
         logger.exception(e)
+        raise SystemExit
         return error_response(req, exception=e)
 
 
