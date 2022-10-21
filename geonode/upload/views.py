@@ -197,7 +197,6 @@ def save_step_view(req, session):
             charset=form.cleaned_data["charset"]
         )
         logger.debug(f"spatial_files: {spatial_files}")
-        raise SystemExit
         if overwrite:
             _layer = Layer.objects.filter(id=req.GET['layer_id'])
             if _layer.exists():
@@ -222,7 +221,7 @@ def save_step_view(req, session):
             charset_encoding=form.cleaned_data["charset"],
             target_store=target_store
         )
-
+        raise SystemExit
         if upload and import_session and import_session.state in (Upload.STATE_READY, Upload.STATE_PENDING):
             import_session.tasks[0].set_charset(form.cleaned_data["charset"])
             sld = None
