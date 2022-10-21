@@ -714,7 +714,6 @@ def view(req, step=None):
             if session:
                 return next_step_response(req, session)
         step = 'save'
-        return error_response(req, errors="test2")
         # delete existing session
         if upload_id and upload_id in req.session:
             del req.session[upload_id]
