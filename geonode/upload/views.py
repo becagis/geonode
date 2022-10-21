@@ -202,7 +202,7 @@ def save_step_view(req, session):
             if _layer.exists():
                 name = _layer.first().name
                 target_store = _layer.first().store
-
+        raise SystemExit
         import_session, upload = save_step(
             req.user,
             name,
@@ -221,7 +221,7 @@ def save_step_view(req, session):
             charset_encoding=form.cleaned_data["charset"],
             target_store=target_store
         )
-        raise SystemExit
+        
         if upload and import_session and import_session.state in (Upload.STATE_READY, Upload.STATE_PENDING):
             import_session.tasks[0].set_charset(form.cleaned_data["charset"])
             sld = None
