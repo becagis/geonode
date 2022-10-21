@@ -709,11 +709,12 @@ def view(req, step=None):
                 Upload,
                 import_id=upload_id,
                 user=req.user)
+            return error_response(req, errors="test1")
             session = upload_obj.get_session
             if session:
                 return next_step_response(req, session)
         step = 'save'
-
+        return error_response(req, errors="test2")
         # delete existing session
         if upload_id and upload_id in req.session:
             del req.session[upload_id]
@@ -724,7 +725,7 @@ def view(req, step=None):
                 req,
                 "upload/layer_upload_invalid.html",
                 context={})
-
+            return error_response(req, errors="test3")
         upload_obj = get_object_or_404(
             Upload, import_id=upload_id, user=req.user)
         session = upload_obj.get_session
@@ -752,6 +753,7 @@ def view(req, step=None):
 
         resp = _steps[step](req, upload_session)
         resp_js = None
+        return error_response(req, errors="test4")
         if resp:
             content = resp.content
             if isinstance(content, bytes):
@@ -800,11 +802,9 @@ def view(req, step=None):
         return error_response(req, errors=errors)
     except gsimporter.BadRequest as e:
         logger.exception(e)
-        
         return error_response(req, errors=e.args)
     except Exception as e:
         logger.exception(e)
-        raise SystemExit
         return error_response(req, exception=e)
 
 
