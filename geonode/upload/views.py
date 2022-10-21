@@ -202,7 +202,6 @@ def save_step_view(req, session):
             if _layer.exists():
                 name = _layer.first().name
                 target_store = _layer.first().store
-        raise SystemExit
         import_session, upload = save_step(
             req.user,
             name,
