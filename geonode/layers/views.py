@@ -1233,6 +1233,7 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
                 logger.exception(e)
                 out['success'] = False
                 out['errors'] = str(e)
+                out['test'] = '1'
             finally:
                 if _tmpdir is not None:
                     shutil.rmtree(_tmpdir, ignore_errors=True)
@@ -1243,13 +1244,13 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
             out['success'] = False
             out['errors'] = form.errors
             out['errormsgs'] = errormsgs
+            out['test'] = '2'
 
         if out['success']:
             status_code = 200
             register_event(request, 'change', layer)
         else:
             status_code = 400
-        out['test'] = 'testerror'
 
         if _tmpdir is not None:
             shutil.rmtree(_tmpdir, ignore_errors=True)
