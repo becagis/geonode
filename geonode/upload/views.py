@@ -747,7 +747,6 @@ def view(req, step=None):
             except Exception as e:
                 logger.exception(e)
                 return error_response(req, errors=e.args)
-        return error_response(req, errors="test2")
         resp = _steps[step](req, upload_session)
         resp_js = None
         if resp:
@@ -759,9 +758,10 @@ def view(req, step=None):
             except json.decoder.JSONDecodeError:
                 resp_js = content
             except Exception as e:
+                return error_response(req, errors="test2")
                 logger.exception(e)
                 return error_response(req, exception=e)
-
+            return error_response(req, errors="test3")
             # must be put back to update object in session
             if upload_session:
                 if resp_js and step == 'final':
