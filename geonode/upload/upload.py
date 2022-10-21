@@ -384,8 +384,8 @@ def save_step(user, layer, spatial_files, overwrite=True, store_spatial_files=Tr
                             error_msg = 'No valid Importer Session could be found'
                     else:
                         if overwrite:
+                            name = "baubang_giaiphancach_80bg"
                             gs_layer = gs_catalog.get_layer(name)
-                            assert False, name
                             _target_store = (
                                 gs_layer.resource.store.name
                                 if not isinstance(gs_layer.resource, list)
