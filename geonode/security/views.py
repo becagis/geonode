@@ -68,7 +68,11 @@ def resource_permissions_handle_post(request, resource):
     message = _("Permissions successfully updated!")
     try:
         permission_spec = json.loads(request.body.decode('UTF-8'))
-        assert permission_spec
+        return HttpResponse(
+            json.dumps({'success': success, 'message': permission_spec}),
+            status=500,
+            content_type='text/plain'
+        )
         resource.set_permissions(permission_spec)
 
         # Check Users Permissions Consistency
