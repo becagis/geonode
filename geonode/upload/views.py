@@ -197,7 +197,7 @@ def save_step_view(req, session):
             charset=form.cleaned_data["charset"]
         )
         logger.debug(f"spatial_files: {spatial_files}")
-
+        raise SystemExit
         if overwrite:
             _layer = Layer.objects.filter(id=req.GET['layer_id'])
             if _layer.exists():
@@ -264,7 +264,6 @@ def save_step_view(req, session):
             return next_step_response(req, upload_session, force_ajax=True)
         return next_step_response(req, None, force_ajax=True)
     else:
-        raise SystemExit
         if hasattr(form, "data_retriever"):
             form.data_retriever.delete_files()
         errors = []
