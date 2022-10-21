@@ -702,7 +702,6 @@ def view(req, step=None):
     upload_session = None
     upload_id = req.GET.get('id', None)
     
-    print("testesssssssssssssssssssssssss")
     if step is None:
         if upload_id:
             # upload recovery
@@ -801,9 +800,11 @@ def view(req, step=None):
         return error_response(req, errors=errors)
     except gsimporter.BadRequest as e:
         logger.exception(e)
+        raise SystemExit
         return error_response(req, errors=e.args)
     except Exception as e:
         logger.exception(e)
+        raise SystemExit
         return error_response(req, exception=e)
 
 
