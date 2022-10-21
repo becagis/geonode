@@ -264,6 +264,7 @@ def save_step_view(req, session):
             return next_step_response(req, upload_session, force_ajax=True)
         return next_step_response(req, None, force_ajax=True)
     else:
+        raise SystemExit
         if hasattr(form, "data_retriever"):
             form.data_retriever.delete_files()
         errors = []
@@ -747,9 +748,7 @@ def view(req, step=None):
             except Exception as e:
                 logger.exception(e)
                 return error_response(req, errors=e.args)
-        return error_response(req, errors="test5")
         resp = _steps[step](req, upload_session)
-        return error_response(req, errors="test1")
         resp_js = None
         if resp:
             content = resp.content
@@ -760,10 +759,8 @@ def view(req, step=None):
             except json.decoder.JSONDecodeError:
                 resp_js = content
             except Exception as e:
-                return error_response(req, errors="test2")
                 logger.exception(e)
                 return error_response(req, exception=e)
-            return error_response(req, errors="test3")
             # must be put back to update object in session
             if upload_session:
                 if resp_js and step == 'final':
