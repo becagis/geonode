@@ -9,7 +9,7 @@
 {% block body %}
   <div class="page-header">
     {% if user.is_authenticated and not READ_ONLY_MODE and not request.user_agent.is_mobile %}
-      <a href="{% url "new_map" %}" class="btn btn-primary pull-right">{% trans "Create a New Map" %}</a>
+      {% comment %} <a href="{% url "new_map" %}" class="btn btn-primary pull-right">{% trans "Create a New Map" %}</a> {% endcomment %}
     {% endif %}
     <h2>{% trans "Explore Maps" %}</h2>
   </div>
