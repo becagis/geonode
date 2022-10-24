@@ -42,7 +42,7 @@ def verify_access_token(request, key):
 
 @csrf_exempt
 def createlayer(request):
-
+    request.encoding = 'UTF-8'
     if (request.POST and 'token' in request.POST):
         token = None
         try:
