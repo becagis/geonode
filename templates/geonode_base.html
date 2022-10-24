@@ -103,7 +103,7 @@
                                         <a href="{% url "maps_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Explore Maps" %}</a>
                                     </li>
                                     {% if not READ_ONLY_MODE %}
-                                        <li><a href="{% url "new_map" %}">{% trans "Create Map" %}</a></li>
+                                        {% comment %} <li><a href="{% url "new_map" %}">{% trans "Create Map" %}</a></li> {% endcomment %}
                                     {% endif %}
                                 </ul>
                             {% else %}
@@ -269,7 +269,7 @@
                             <a href="{% url "maps_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Explore Maps" %}</a>
                         </li>
                         {% if user.is_authenticated and not READ_ONLY_MODE %}
-                            <li><a href="{% url "new_map" %}">{% trans "Create Map" %}</a></li>
+                            {% comment %} <li><a href="{% url "new_map" %}">{% trans "Create Map" %}</a></li> {% endcomment %}
                         {% endif %}
                     </ul>
                 </div>
