@@ -64,7 +64,7 @@ def createlayer(request):
                     ## Create layer
                     name = form.cleaned_data['name']
                     name = slugify(name.replace(".", "_"))
-                    title = form.cleaned_data['title']
+                    title = ''#form.cleaned_data['title']
                     geometry_type = form.cleaned_data['geometry_type']
                     attributes = form.cleaned_data['attributes']
                     permissions = form.cleaned_data["permissions"]
