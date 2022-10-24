@@ -1592,16 +1592,17 @@ if GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY == 'mapstore':
             "options": {
                 "subdomains": [ "mt0", "mt1", "mt2", "mt3"]
             }
-        }, {
-            "type": "tileprovider",
-            "title": "BecaGIS OSM",
-            "provider": "custom",
-            "name": "becagis-maps",
-            "group": "background",
-            "visibility": False,
-            "thumbURL": f"{SITEURL}static/custom/img/vietnam-osm.jpg",
-            "url": "https://thuduc-maps.hcmgis.vn/thuducserver/gwc/service/wmts?layer=thuduc:thuduc_maps&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}"
-        },
+        }, 
+        # {
+        #     "type": "tileprovider",
+        #     "title": "BecaGIS OSM",
+        #     "provider": "custom",
+        #     "name": "becagis-maps",
+        #     "group": "background",
+        #     "visibility": False,
+        #     "thumbURL": f"{SITEURL}static/custom/img/vietnam-osm.jpg",
+        #     "url": "https://thuduc-maps.hcmgis.vn/thuducserver/gwc/service/wmts?layer=thuduc:thuduc_maps&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}"
+        # },
         {
             "type": "osm",
             "title": "Open Street Map",
