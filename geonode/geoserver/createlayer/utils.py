@@ -190,7 +190,7 @@ def create_gs_layer(name, title, geometry_type, attributes=None):
     attributes_block += "</attributes>"
 
     # TODO implement others srs and not only EPSG:4326
-    xml = u'' + (
+    xml = (
         "<featureType>"
         f"<name>{name}</name>"
         f"<nativeName>{native_name}</nativeName>"
@@ -204,9 +204,9 @@ def create_gs_layer(name, title, geometry_type, attributes=None):
     url = (
         f'{ogc_server_settings.rest}/workspaces/{workspace.name}/datastores/{datastore.name}/featuretypes'
     )
-    headers = {'Content-Type': 'application/xml;charset=utf-8'}
+    headers = {'Content-Type': 'application/xml'}
     _user, _password = ogc_server_settings.credentials
-    req = requests.post(url, data=xml, headers=headers, auth=(_user, _password))
+    req = requests.post(url, data=xml.encode("utf-8"), headers=headers, auth=(_user, _password))
     if req.status_code != 201:
         logger.error(f'Request status code was: {req.status_code}')
         logger.error(f'Response was: {req.text}')
