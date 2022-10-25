@@ -414,7 +414,7 @@ def set_layer_style(saved_layer, title, sld, base_file=None):
             if not style:
                 style = gs_catalog.create_style(
                     saved_layer.name, sld,
-                    overwrite=True, raw=True,
+                    overwrite=False, raw=True,
                     workspace=saved_layer.workspace)
             elif sld:
                 style.style_format = _extract_style_version_from_sld(sld)
