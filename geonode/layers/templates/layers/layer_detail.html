@@ -478,11 +478,11 @@
       {% endif %}
     {% endif %}
 
-    {% if not request.user_agent.is_mobile %}  
+    {% comment %} {% if not request.user_agent.is_mobile %}  
     <li class="list-group-item">
       <a href="{% url "new_map" %}?layer={{resource.service_typename}}&view=True" class="btn btn-default btn-md btn-block">{% trans "View Layer" %}</a>
     </li>
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     {% if not request.user_agent.is_mobile %}  
     <li class="list-group-item">
