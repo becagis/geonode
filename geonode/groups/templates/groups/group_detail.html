@@ -119,12 +119,22 @@
   SEARCH_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='profiles' %}'+ '?group='+ '{{ object.slug }}';
   </script>
     <script>
-    $(document).ready(function() {$.ajax("/geoserver/rest/ruleCache/invalidate", {
-      method: 'GET',
-      success: function() {
-        console.log('invalidate rules');
+    $(document).ready(function() {
+      let updateRule = function() {
+        $.ajax("/geoserver/rest/ruleCache/invalidate", {
+          method: 'GET',
+          success: function() {
+            console.log('invalidate rules');
+          }
+      })
       }
-    })})
+      updateRule();
+      updateRule();
+      updateRule();
+      setTimeout(updateRule, 5000);
+      setTimeout(updateRule, 10000);
+      setTimeout(updateRule, 20000);
+    })
   </script>
   {% with include_spatial='false' %}
   {% include 'search/search_scripts.html' %}
