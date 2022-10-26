@@ -49,6 +49,7 @@ from dal import autocomplete
 from . import forms
 from . import models
 from .models import GroupMember
+from geonode.geoserver.security import set_geofence_invalidate_cache
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +99,6 @@ def group_create(request):
                         group.slug]))
     else:
         form = forms.GroupForm()
-
     return render(request, "groups/group_create.html", context={"form": form})
 
 
@@ -122,7 +122,6 @@ def group_update(request, slug):
                         group.slug]))
     else:
         form = forms.GroupForm(instance=group)
-
     return render(request, "groups/group_update.html", context={
         "form": form,
         "group": group,
@@ -198,6 +197,7 @@ def group_members_add(request, slug):
             except Exception as e:
                 messages.add_message(request, messages.ERROR, e)
                 return redirect("group_members", slug=group.slug)
+        set_geofence_invalidate_cache()
     return redirect("group_detail", slug=group.slug)
 
 
@@ -210,6 +210,7 @@ def group_member_remove(request, slug, username):
         return HttpResponseForbidden()
     else:
         GroupMember.objects.get(group=group, user=user).delete()
+        set_geofence_invalidate_cache()
         return redirect("group_detail", slug=group.slug)
 
 
@@ -249,6 +250,7 @@ def group_join(request, slug):
         return redirect("group_detail", slug=group.slug)
     else:
         group.join(request.user, role="member")
+        set_geofence_invalidate_cache()
         return redirect("group_detail", slug=group.slug)
 
 
@@ -265,6 +267,7 @@ def group_remove(request, slug):
             return HttpResponseForbidden()
 
         group.delete()
+        set_geofence_invalidate_cache()
         return HttpResponseRedirect(reverse("group_list"))
     else:
         return HttpResponseNotAllowed()
