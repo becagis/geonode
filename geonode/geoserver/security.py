@@ -602,6 +602,7 @@ def sync_resources_with_guardian(resource=None):
                     purge_geofence_layer_rules(r)
                     layer = Layer.objects.get(id=r.id)
                     perm_spec = layer.get_all_level_info()
+                    raise Exception(json.dumps(perm_spec))
                     # All the other users
                     if 'users' in perm_spec:
                         for user, perms in perm_spec['users'].items():
