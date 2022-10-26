@@ -48,7 +48,7 @@ def sync_permission(request):
     resource = get_object_or_404(ResourceBase, uuid=uuid)
     sync_resources_with_guardian(resource)
     return HttpResponse(
-        json.dumps({'success': 'ok', 'message': _('Security Rules Cache Refreshed!')}),
+        json.dumps({'success': 'ok', 'message': 'success'}),
         status=200,
         content_type='text/plain'
     )
