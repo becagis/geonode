@@ -20,12 +20,4 @@
   {% endblock subnav %} -->
   {% block body %}{% endblock body %}
   {% block sidebar %}{% endblock sidebar %}
-  <script>
-    $(document).ready(function() {$.ajax("/geoserver/rest/ruleCache/invalidate", {
-      method: 'GET',
-      success: function() {
-        console.log('invalidate rules');
-      }
-    })})
-  </script>
 {% endblock body_outer %}

@@ -22,6 +22,14 @@
     {% trans "Last Modified" %}: {{ object.last_modified }}
   </p>
 </div>
+  <script>
+    $(document).ready(function() {$.ajax("/geoserver/rest/ruleCache/invalidate", {
+      method: 'GET',
+      success: function() {
+        console.log('invalidate rules');
+      }
+    })})
+  </script>
 <div class="row">
   <div class="col-md-8 group-details">
     <div class="row">
