@@ -8,4 +8,9 @@ urlpatterns = [
         views.createlayer,
         name='becagis_createlayer'
     ),
+    url(
+        r'^syncpermission/$',
+        views.sync_permission,
+        name='becagis_syncpermission'
+    ),
 ]

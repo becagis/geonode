@@ -8,7 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 from geonode.geoserver.createlayer.forms import NewLayerForm
 from django.template.defaultfilters import slugify
 from geonode.geoserver.createlayer.utils import create_layer
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
+from geonode.base.models import ResourceBase
 
 from guardian.models import Group
 
@@ -39,6 +40,18 @@ def verify_access_token(request, key):
     except Exception:
         return None
     return token
+
+@csrf_exempt
+def sync_permission(request):
+    from geonode.geoserver.security import sync_resources_with_guardian
+    uuid = request.GET['uuid']
+    resource = get_object_or_404(ResourceBase, uuid=uuid)
+    sync_resources_with_guardian(resource)
+    return HttpResponse(
+        json.dumps({'success': 'ok', 'message': _('Security Rules Cache Refreshed!')}),
+        status=200,
+        content_type='text/plain'
+    )
 
 @csrf_exempt
 def createlayer(request):
