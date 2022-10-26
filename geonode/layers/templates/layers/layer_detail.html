@@ -310,9 +310,9 @@
           {% if links_download %}
             <button class="btn btn-primary btn-md btn-block" data-toggle="modal" data-target="#download-layer">{% trans "Download Layer" %}</button>
           {% else %}
-            {% if request.user.is_authenticated %}
+            {% comment %} {% if request.user.is_authenticated %}
             <button class="btn btn-primary btn-md btn-block" id="request-download">{% trans "Request Download" %}</button>
-            {% endif %}
+            {% endif %} {% endcomment %}
           {% endif %}
           </li>
         {% endif %}
