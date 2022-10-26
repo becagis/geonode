@@ -240,7 +240,7 @@
       {% endif %}
     
     {% if not request.user_agent.is_mobile %}
-        {% comment %} <li class="list-group-item">
+        {% comment %} <li class="list-group-item">cart.toggleItem(item)
         {% if "change_resourcebase" not in perms_list and "change_resourcebase_metadata" not in perms_list %}
           <a href="{% url "map_view" resource.id %}" class="btn btn-default btn-md btn-block">{% trans "View Map" %}</a>
         {% else %}
