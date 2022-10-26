@@ -22,14 +22,6 @@
     {% trans "Last Modified" %}: {{ object.last_modified }}
   </p>
 </div>
-  <script>
-    $(document).ready(function() {$.ajax("/geoserver/rest/ruleCache/invalidate", {
-      method: 'GET',
-      success: function() {
-        console.log('invalidate rules');
-      }
-    })})
-  </script>
 <div class="row">
   <div class="col-md-8 group-details">
     <div class="row">
@@ -125,6 +117,14 @@
 {{ block.super }}
   <script type="text/javascript">
   SEARCH_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='profiles' %}'+ '?group='+ '{{ object.slug }}';
+  </script>
+    <script>
+    $(document).ready(function() {$.ajax("/geoserver/rest/ruleCache/invalidate", {
+      method: 'GET',
+      success: function() {
+        console.log('invalidate rules');
+      }
+    })})
   </script>
   {% with include_spatial='false' %}
   {% include 'search/search_scripts.html' %}
