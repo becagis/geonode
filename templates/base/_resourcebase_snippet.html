@@ -41,7 +41,7 @@
               {% endverbatim %}
 
               {% if facet_type == 'layers' %}
-                <div class="col-xs-2 flex gap-2 items-center justify-end pt-6">
+                <div class="col-xs-2 flex gap-2 items-center justify-end pt-6" style="display:none"> 
                   {% if not READ_ONLY_MODE %}
                     <button class="btn btn-default btn-xs">
                       <a title="{% trans 'Create a Map' %}" {% verbatim %} ng-if="item.detail_url.indexOf('/layers/') > -1" href="{% endverbatim %}{% url "new_map" %}?layer={% verbatim %}{{ item.detail_url.substring(8) }}">
