@@ -605,7 +605,6 @@ def sync_resources_with_guardian(resource=None):
                     # All the other users
                     if 'users' in perm_spec:
                         for user, perms in perm_spec['users'].items():
-                            raise Exception(user)
                             user = get_user_model().objects.get(username=user)
                             # Set the GeoFence User Rules
                             geofence_user = str(user)
