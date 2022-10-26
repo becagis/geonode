@@ -11,7 +11,7 @@
 
         {% if user.is_authenticated and facet_type == 'layers' and not request.user_agent.is_mobile %}
           {% block bulk_perms_button %}
-          <div class="btn-group btn-group-justified" role="group" aria-label="tools">
+          <div class="btn-group btn-group-justified" role="group" aria-label="tools" style="display:none">
             <div class="btn-group" role="group">
               <button type="button" class="btn btn-default" ng-disabled="!cart.getCart().items.length" data-toggle="modal" data-target="#_bulk_permissions">{% trans "Set permissions" %}</button>
             </div>
