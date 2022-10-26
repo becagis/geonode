@@ -621,7 +621,6 @@ def sync_resources_with_guardian(resource=None):
                 except Exception as e:
                     logger.exception(e)
                     logger.warn(f"!WARNING! - Failure Synching-up Security Rules for Resource [{r}]")
-                    raise Exception(e)
 
 
 def get_user_geolimits(layer, user, group, gf_services):
