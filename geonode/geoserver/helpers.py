@@ -417,8 +417,10 @@ def set_layer_style(saved_layer, title, sld, base_file=None):
                     overwrite=False, raw=True,
                     workspace=saved_layer.workspace)
             elif sld:
+                import time
+                ts = time.time()
                 style = gs_catalog.create_style(
-                    saved_layer.name + '11111', sld,
+                    saved_layer.name + str(ts), sld,
                     overwrite=False, raw=True,
                     workspace=saved_layer.workspace)
                 # style.style_format = _extract_style_version_from_sld(sld)
