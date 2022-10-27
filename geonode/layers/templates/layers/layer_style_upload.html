@@ -49,10 +49,6 @@
     <form id="file-uploader" method="post" enctype="multipart/form-data">
       <!-- UI change to hide the list of previously uploaded files from the user -->
       <input type="file" id="file-input" style="display: none;" multiple>
-      <select name="override">
-        <option value="0">Create new style</option>
-        <option value="1">Overwrite the current default style</option>
-      </select>
       <input class="btn btn-default" type="button" value="{% trans "Choose Files" %}" onclick="document.getElementById('file-input').click();">
     </form>
 
@@ -64,6 +60,13 @@
           {% trans "Is Upload Metadata XML Form" %} <input type="checkbox" name="style_upload_form" id="id_style_upload_form" checked="true"/>
           <input type="text" name="layer_title" id="id_layer_title" value="{{ resource.alternate }}"/>
       </div>
+    </section>
+
+    <section class="widget">
+        <select name="override">
+          <option value="0">Create new style</option>
+          <option value="1">Overwrite the current default style</option>
+        </select>
     </section>
 
     <section>
