@@ -36,7 +36,7 @@
             <option value="{{ style.0 }}" selected>{{ style.0 }}</option>
             {% else %}
             {% comment %} <option value="{{ style.0 }}">{% if style.1 %}{{ style.1 }}{% else %}{{ style.0 }}{% endif %}</option> {% endcomment %}
-            <option value="{{ style.0 }}" selected>{{ style.0 }}</option>
+            <option value="{{ style.0 }}">{{ style.0 }}</option>
             {% endif %}
           {% endfor %}
         </select>
@@ -57,7 +57,7 @@
             <option value="{{ style.0 }}" selected>{{ style.0 }}</option>
             {% comment %} <option value='{{ style.0 }}' selected>{% if style.1 %}{{ style.1 }}{% else %}{{ style.0 }}{% endif %}</option> {% endcomment %}
             {% else %}
-            <option value="{{ style.0 }}" selected>{{ style.0 }}</option>
+            <option value="{{ style.0 }}">{{ style.0 }}</option>
             {% comment %} <option value='{{ style.0 }}'>{% if style.1 %}{{ style.1 }}{% else %}{% endif %}</option> {% endcomment %}
             {% endif %}
           {% endfor %}
