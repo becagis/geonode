@@ -190,41 +190,10 @@ USE_L10N = ast.literal_eval(os.getenv('USE_I18N', 'True'))
 LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', "en")
 
 _DEFAULT_LANGUAGES = """(
-    ('af', 'Afrikaans'),
-    ('sq', 'Albanian'),
-    ('am', 'Amharic'),
-    ('ar', 'Arabic'),
-    ('id', 'Bahasa Indonesia'),
-    ('bn', 'Bengali'),
-    ('de', 'Deutsch'),
-    ('en', 'English'),
-    ('es', 'Español'),
-    ('fr', 'Français'),
-    ('it', 'Italiano'),
-    ('km', 'Khmer'),
-    ('nl', 'Nederlands'),
-    ('ne', 'Nepali'),
-    ('fa', 'Persian'),
-    ('pl', 'Polish'),
-    ('pt', 'Portuguese'),
-    ('pt-br', 'Portuguese (Brazil)'),
-    ('ru', 'Russian'),
-    ('si', 'Sinhala'),
-    ('sw', 'Swahili'),
-    ('sv', 'Swedish'),
-    ('tl', 'Tagalog'),
-    ('ta', 'Tamil'),
-    ('uk', 'Ukranian'),
-    ('vi', 'Vietnamese'),
-    ('el', 'Ελληνικά'),
-    ('th', 'ไทย'),
-    ('zh-cn', '中文'),
-    ('ja', '日本語'),
-    ('ko', '한국어'),
-    ('sk', 'Slovensky'),
+    ('en', 'English')
 )"""
 
-LANGUAGES = ast.literal_eval(os.getenv('LANGUAGES', _DEFAULT_LANGUAGES))
+LANGUAGES = _DEFAULT_LANGUAGES #ast.literal_eval(os.getenv('LANGUAGES', _DEFAULT_LANGUAGES))
 
 EXTRA_LANG_INFO = {
     'am': {
