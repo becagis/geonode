@@ -49,7 +49,10 @@
     <form id="file-uploader" method="post" enctype="multipart/form-data">
       <!-- UI change to hide the list of previously uploaded files from the user -->
       <input type="file" id="file-input" style="display: none;" multiple>
-      <input type="checkbox" id="override" name="override"><label>Overwrite the current default style </label><br/>
+      <select name="override">
+        <option value="0">Create new style</option>
+        <option value="1">Overwrite the current default style</option>
+      </select>
       <input class="btn btn-default" type="button" value="{% trans "Choose Files" %}" onclick="document.getElementById('file-input').click();">
     </form>
 

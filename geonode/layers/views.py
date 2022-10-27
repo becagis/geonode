@@ -103,7 +103,8 @@ from geonode.utils import (
     mkdtemp)
 from geonode.geoserver.helpers import (
     set_layer_style,
-    ogc_server_settings)
+    ogc_server_settings,
+    set_layer_style_override)
 from geonode.geoserver.security import set_geowebcache_invalidate_cache
 from geonode.tasks.tasks import set_permissions
 from geonode.upload.forms import LayerUploadForm as UploadViewsetForm
@@ -309,8 +310,11 @@ def layer_style_upload(request):
             _PERMISSION_MSG_MODIFY)
 
         sld = request.FILES['sld_file'].read()
+        
+        override = request.POST.get('override', '0')
+        override = True if override == '1' or override == 1 else False
 
-        set_layer_style(layer, data.get('layer_title'), sld)
+        set_layer_style_override(override, layer, data.get('layer_title'), sld)
         body['url'] = layer.get_absolute_url()
         body['bbox'] = layer.bbox_string
         body['crs'] = {
@@ -1220,7 +1224,6 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
                                 _step
                             )
                             if response.status_code != 200:
-                                out['test'] = _step
                                 raise Exception(response.content)
                         else:
                             logger.error("starting final step for Replace Layer")
