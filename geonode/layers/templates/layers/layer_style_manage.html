@@ -62,24 +62,6 @@
             {% endif %}
           {% endfor %}
         </select>
-        <script>
-          $(document).ready(function() {
-            $('#style-select').on('change', function() {
-              const vals = $('#style-select').val();
-              const defaultStyleSelector = $('#default_style');
-              const defaultVal = defaultStyleSelector.val();
-              console.log(defaultVal);
-              defaultStyleSelector.empty();
-              vals.forEach(function(val) {
-                defaultStyleSelector.append($('<option>', {
-                  value: val,
-                  text: val
-                }))
-              })
-              defaultStyleSelector.val(defaultVal);
-            })
-          })
-        </script>
         {% csrf_token %}
         <input type="hidden" value="{{ layer.service_typename }}" />
       </div>
@@ -129,6 +111,22 @@
           styleName.toUpperCase().indexOf(searchString.toUpperCase()) > -1 ? listElement.show() : listElement.hide();
       });
     });
+     $('#style-select').on('change', function() {
+        const vals = $('#style-select').val();
+
+        const defaultStyleSelector = $('#default_style');
+        const defaultVal = defaultStyleSelector.val();
+        defaultStyleSelector.empty();
+        
+        vals.forEach(function(val) {
+          defaultStyleSelector.append($('<option>', {
+            value: val,
+            text: val
+          }))
+        })
+        
+        defaultStyleSelector.val(defaultVal);
+      })
   });
 </script>
 {% endblock %}
