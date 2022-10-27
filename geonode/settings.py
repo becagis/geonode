@@ -194,7 +194,7 @@ _DEFAULT_LANGUAGES = """(
     ('es', 'Español')
 )"""
 
-LANGUAGES = _DEFAULT_LANGUAGES #ast.literal_eval(os.getenv('LANGUAGES', _DEFAULT_LANGUAGES))
+LANGUAGES = ast.literal_eval(_DEFAULT_LANGUAGES) #ast.literal_eval(os.getenv('LANGUAGES', _DEFAULT_LANGUAGES))
 
 EXTRA_LANG_INFO = {
     'am': {
