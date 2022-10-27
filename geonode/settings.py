@@ -190,7 +190,8 @@ USE_L10N = ast.literal_eval(os.getenv('USE_I18N', 'True'))
 LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', "en")
 
 _DEFAULT_LANGUAGES = """(
-    ('en', 'English')
+    ('en', 'English'),
+    ('es', 'Español')
 )"""
 
 LANGUAGES = _DEFAULT_LANGUAGES #ast.literal_eval(os.getenv('LANGUAGES', _DEFAULT_LANGUAGES))
