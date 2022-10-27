@@ -43,6 +43,14 @@
     #paneltbar {
       margin-top: 1px !important;
     }
+    ul.list-unstyled {
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    ul.list-unstyled li {
+      display: inline-flex;
+    }
     </style>
 
     <h2 class="page-title">{{ resource.title|default:resource.alternate }}</h2>
@@ -620,7 +628,7 @@
         {% if OGC_SERVER.default.BACKEND == 'geonode.geoserver' %}
             {% get_all_resource_styles resource as resource_styles_all%}
             {% for style in resource_styles_all %}
-            <li>
+            <li title="{{ style.name }}">
               {% if resource.default_style == style %}
               <input type="radio" checked name="style" id="{{ style.name }}" value="{{ style.name }}"/>
                {% comment %} <input type="radio" checked name="style" id="{{ style.name }}" value="{{ style.sld_title|default_if_none:style.name }}"/> {% endcomment %}
