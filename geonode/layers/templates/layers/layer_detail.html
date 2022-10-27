@@ -622,12 +622,15 @@
             {% for style in resource_styles_all %}
             <li>
               {% if resource.default_style == style %}
-               <input type="radio" checked name="style" id="{{ style.name }}" value="{{ style.sld_title|default_if_none:style.name }}"/>
+              <input type="radio" checked name="style" id="{{ style.name }}" value="{{ style.name }}"/>
+               {% comment %} <input type="radio" checked name="style" id="{{ style.name }}" value="{{ style.sld_title|default_if_none:style.name }}"/> {% endcomment %}
               {% trans "(default style)" %}
               {% else %}
-              <input type="radio" name="style" id="{{ style.name }}" value="{{ style.sld_title|default_if_none:style.name }}"/>
+              {% comment %} <input type="radio" name="style" id="{{ style.name }}" value="{{ style.sld_title|default_if_none:style.name }}"/> {% endcomment %}
+              <input type="radio" name="style" id="{{ style.name }}" value="{{ style.name }}"/>
               {% endif %}
-              <a href="{{ GEOSERVER_BASE_URL }}{{ style.absolute_url }}" >{{ style.sld_title|default_if_none:style.name }}</a>
+              {% comment %} <a href="{{ GEOSERVER_BASE_URL }}{{ style.absolute_url }}" >{{ style.sld_title|default_if_none:style.name }}</a> {% endcomment %}
+              <a href="{{ GEOSERVER_BASE_URL }}{{ style.absolute_url }}" >{{ style.name }}</a>
             </li>
             {% empty %}
             <li>{% trans "No styles associated with this layer" %}</li>
