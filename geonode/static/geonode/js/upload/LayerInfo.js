@@ -274,6 +274,7 @@ define(function (require, exports) {
         if ($('#id_style_upload_form').prop('checked')) {
              form_data.append('style_upload_form', true);
              form_data.append('layer_title', $('#id_layer_title').val());
+             form_data.append('override', $('#id_override').val());
         }
         return form_data;
     };

@@ -423,7 +423,7 @@ def set_layer_style_override(override, saved_layer, title, sld, base_file=None):
                     import time
                     ts = time.time()
                     style = gs_catalog.create_style(
-                        saved_layer.name + str(int(ts * 100)), sld,
+                        saved_layer.name + "_" + str(int(ts * 100)), sld,
                         overwrite=False, raw=True,
                         workspace=saved_layer.workspace)
 
