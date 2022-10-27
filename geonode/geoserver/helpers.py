@@ -425,6 +425,7 @@ def set_layer_style(saved_layer, title, sld, base_file=None):
                 # style.update_body(sld)
         except Exception as e:
             logger.exception(e)
+            raise Exception(e)
 
     if layer and style:
         _old_styles = []
