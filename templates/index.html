@@ -171,6 +171,8 @@
                         Maps{% endblocktrans %}</a></h4>
                     <p class="item-content">{% trans "Aggregating and styling geospatial data to generate and publish maps in BecaGIS." %}</p>
                     {% if user.is_authenticated %}
+                                          <p><a class="btn btn-default" href="{% url "maps_browse" %}"
+                            role="button">{% trans "Explore maps" %} &raquo;</a></p>
                       {% comment %} <p><a class="btn btn-default" href="{% url "new_map" %}"
                             role="button">{% trans "Create maps" %} &raquo;</a></p> {% endcomment %}
                     {% else %}
