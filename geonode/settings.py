@@ -61,7 +61,7 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 # present pretty error pages.
 DEBUG = False # ast.literal_eval(os.getenv('DEBUG', 'True'))
 
-BECAMAPS_URL = os.getenv('BECAMAPS_URL', 'https://becamaps.vntts.vn')
+BECAMAPS_URL = os.getenv('BECAMAPS_URL', 'https://becamaps-uat.becamex.com.vn')
 
 # Set to True to load non-minified versions of (static) client dependencies
 # Requires to set-up Node and tools that are required for static development
