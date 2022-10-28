@@ -18,6 +18,7 @@
 #########################################################################
 import math
 import logging
+from operator import setitem
 import traceback
 from urllib.parse import quote, urlsplit, urljoin
 import warnings
@@ -171,6 +172,7 @@ def map_detail(request, mapid, template='maps/map_detail.html'):
             access_token = None
 
     context_dict = {
+        'becamaps_url': getattr(settings, 'BECAMAPS_URL'),
         'access_token': access_token,
         'config': config,
         'resource': map_obj,
