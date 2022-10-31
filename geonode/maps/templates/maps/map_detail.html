@@ -103,7 +103,7 @@
                 <div class="map-layers">
                 <i class="fa fa-chevron-right"></i>
                 {% if layer.local %}
-                  <a href="{% url "layer_detail" layer.name %}">
+                  <a href="{% url "layer_detail" layer.typename %}">
                     {% if layer.layer_title %}
                     {{ layer.layer_title }}
                     {% else %}
@@ -316,8 +316,8 @@
 
         {% if user.is_authenticated and not READ_ONLY_MODE %}
           <li class="list-group-item">
-            <h4>{% trans "Copy this map" %}</h4>
-            <p>{% trans "Duplicate this map and modify it for your own purposes" %}</p>
+            {% comment %} <h4>{% trans "Copy this map" %}</h4> {% endcomment %}
+            {% comment %} <p>{% trans "Duplicate this map and modify it for your own purposes" %}</p> {% endcomment %}
             {% comment %} <a href="{% url "new_map" %}?copy={{ resource.id }}" class="btn btn-default btn-md btn-block">{% trans "Create a New Map" %}</a> {% endcomment %}
           </li>
         {% endif %}
