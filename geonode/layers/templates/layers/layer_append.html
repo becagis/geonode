@@ -105,7 +105,7 @@
 </script>
 {% if GEONODE_SECURITY_ENABLED %}
 {% with resource=layer %}
-{% include "_permissions_form_js.html" %}
+{% comment %} {% include "_permissions_form_js.html" %} {% endcomment %}
 {% endwith %}
 {% endif %}
 {% endblock extra_script %}
