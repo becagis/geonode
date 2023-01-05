@@ -35,7 +35,7 @@ services:
       - MONITORING_ENABLED=False
       - GEONODE_LB_HOST_IP=localhost
       - GEONODE_LB_PORT=80
-      - SITEURL=http://localhost:8033/
+      - SITEURL=http://localhost:9033/
       - GEOSERVER_PUBLIC_LOCATION=http://localhost:8080/geoserver/
       - GEOSERVER_WEB_UI_LOCATION=http://localhost:8080/geoserver/
 
@@ -46,7 +46,7 @@ services:
       # - /var/run/docker.sock:/var/run/docker.sock 
 
     ports:
-      - "8033:8000"
+      - "9033:8000"
       - "5678:5678"
 
     entrypoint: ["/usr/src/geonode/entrypoint.sh"]
@@ -71,7 +71,7 @@ services:
       - MONITORING_ENABLED=False
       - GEONODE_LB_HOST_IP=localhost
       - GEONODE_LB_PORT=80
-      - SITEURL=http://localhost:8033/
+      - SITEURL=http://localhost:9033/
       - GEOSERVER_PUBLIC_LOCATION=http://localhost:8080/geoserver/
       - GEOSERVER_WEB_UI_LOCATION=http://localhost:8080/geoserver/
 

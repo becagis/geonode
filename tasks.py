@@ -231,6 +231,30 @@ def prepare(ctx):
         f'sed -i "s|<logoutUri>.*</logoutUri>|<logoutUri>{new_ext_ip}account/logout/</logoutUri>|g" {oauth_config}',
         pty=True)
 
+    # @becagis
+    if os.environ.get('APP_ENV', 'local') == 'production':
+        ctx.run(
+            f'sed -i "s|<accessTokenUri>.*</accessTokenUri>|<accessTokenUri>{new_ext_ip}o/token/</accessTokenUri>|g" {oauth_config}',
+            pty=True)
+        ctx.run(
+            f'sed -i "s|<checkTokenEndpointUrl>.*</checkTokenEndpointUrl>|<checkTokenEndpointUrl>{new_ext_ip}api/o/v4/tokeninfo/</checkTokenEndpointUrl>|g" {oauth_config}',
+            pty=True)
+        ctx.run(
+            f'sed -i "s|<scopes>.*</scopes>|<scopes>write,read,groups</scopes>|g" {oauth_config}',
+            pty=True)
+        
+        # Updating GeoServer Global Config
+        global_config="/geoserver_data/data/global.xml"
+        ctx.run(
+            f'sed -i "s|<proxyBaseUrl>.*</proxyBaseUrl>|<proxyBaseUrl>{new_ext_ip}geoserver</proxyBaseUrl>|g" {global_config}',
+            pty=True)
+
+        # Updating REST Role Service Config
+        rest_config="/geoserver_data/data/security/role/'geonode REST role service'/config.xml"
+        ctx.run(
+            f'sed -i "s|<baseUrl>.*</baseUrl>|<baseUrl>{new_ext_ip}</baseUrl>|g" {rest_config}',
+            pty=True)
+
 
 @task
 def fixtures(ctx):

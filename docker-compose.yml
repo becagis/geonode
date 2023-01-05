@@ -50,7 +50,8 @@ services:
 
   # Nginx is serving django static and media files and proxies to django and geonode
   geonode:
-    image: geonode/nginx:3.3.2
+    image: becamexidc2020/geoportal_nginx:3.3.2
+    # image: geonode/nginx:3.3.2
     build: ./scripts/docker/nginx/
     container_name: nginx4${COMPOSE_PROJECT_NAME}
     environment:
@@ -60,8 +61,8 @@ services:
       - HTTP_PORT=${HTTP_PORT}
       - LETSENCRYPT_MODE=${LETSENCRYPT_MODE}
       - RESOLVER=127.0.0.11
-      - DJANGO_UPSTREAM_HOST=django
-      - GEOSERVER_UPSTREAM_HOST=geoserver
+      - DJANGO_CONTAINER=django
+      - GEOSERVER_CONTAINER=geoserver
     ports:
       - "${HTTP_PORT}:${HTTP_PORT}"
       # - "${HTTPS_PORT}:${HTTPS_PORT}"
@@ -88,6 +89,8 @@ services:
   # Geoserver backend
   geoserver:
     image: geonode/geoserver:2.19.6
+    # image: becamexidc2020/geoportal_geoserver:2.19.6
+    # build: ./scripts/docker/geoserver/
     container_name: geoserver4${COMPOSE_PROJECT_NAME}
     healthcheck:
       test: "curl --fail --silent --write-out 'HTTP CODE : %{http_code}\n' --output /dev/null http://127.0.0.1:8080/geoserver/rest/workspaces/geonode.html"
@@ -97,12 +100,15 @@ services:
       start_period: 60s    
     env_file:
       - .env
+    environment:
+      - GEOSERVER_VERSION=2.19.6
     volumes:
       - statics:/mnt/volumes/statics
       - geoserver-data-dir:/geoserver_data/data
       - backup-restore:/backup_restore
       - data:/data
       - tmp:/tmp
+      # - ./scripts/docker/geoserver/entrypoint.sh:/usr/local/tomcat/tmp/entrypoint.sh
     restart: on-failure
     # ports:
     #   - "8080:8080"
