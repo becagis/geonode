@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "geo-server.fullname" . }}
+  labels:
+    {{- include "geo-server.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "geo-server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "geo-server.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "geo-server.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: gis-client
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ (tpl .Values.persistence.existingClaim $) | default (include "geo-server.fullname" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+      initContainers:
+        - name: volume-data
+          image: geonode/geoserver_data:2.19.6
+          command:
+            - /bin/sh
+          args:
+            - -ec
+            - |            
+              cp -R /geoserver_data/data/* /mydata/geoserver-data-dir
+          stdin: true
+          tty: true
+          volumeMounts:
+            - name: gis-client
+              mountPath: /mydata
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          #command: ['sh', '-c', 'sleep 500000'] #  
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.configMapRef }}
+          volumeMounts:
+            - name: gis-client
+              mountPath: /mnt/volumes/statics
+              subPath: statics
+            - name: gis-client
+              mountPath: /geoserver_data/data
+              subPath: geoserver-data-dir
+            - name: gis-client
+              mountPath: /backup_restore
+              subPath: backup-restore
+            - name: gis-client
+              mountPath: /data
+              subPath: data
+            - name: gis-client
+              mountPath: /tmp
+              subPath: tmp
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
