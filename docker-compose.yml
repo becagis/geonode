@@ -1,4 +1,5 @@
 version: '3.4'
+# changes
 
 # Common Django template for GeoNode and Celery services below
 x-common-django:

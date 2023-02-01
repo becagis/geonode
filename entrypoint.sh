@@ -1,4 +1,5 @@
 #!/bin/bash
+# changes
 
 # Exit script in case of error
 set -e
