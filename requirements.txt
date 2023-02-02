@@ -31,6 +31,7 @@ pyrsistent==0.17.3
 zipstream-new==1.1.8
 schema==0.7.5
 smart_open==5.2.1
+cryptography==38.0.4
 
 # Django Apps
 django-allauth==0.47.0

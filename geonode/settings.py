@@ -2257,4 +2257,4 @@ ADMIN_SITE_TITLE = os.getenv('ADMIN_SITE_TITLE', 'GeoPortal Admin Portal')
 ADMIN_INDEX_TITLE = os.getenv('ADMIN_INDEX_TITLE', 'Welcome to GeoPortal')
 
 
-from .ldap_settings import *
+#from .ldap_settings import *

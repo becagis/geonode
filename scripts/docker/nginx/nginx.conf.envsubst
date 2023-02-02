@@ -9,6 +9,14 @@ events {
 
 http {
     server_names_hash_bucket_size  64;
+    log_format upstreamlog '$server_name to: $upstream_addr {$request} '
+   'upstream_response_time $upstream_response_time'
+   ' request_time $request_time';
+
+    upstream geoserver_balancer {
+        server geoserver:8080;
+        server geoserver2:8080;
+    }
 
     # Allow Nginx to resolve Docker host names (see https://sandro-keil.de/blog/2017/07/24/let-nginx-start-if-upstream-host-is-unavailable-or-down/)
 #     resolver $RESOLVER; # it seems rancher uses 169.254.169.250 instead of 127.0.0.11 which works well in docker-compose (see /etc/resolv.conf)
@@ -24,7 +32,7 @@ http {
     server {
         listen              $HTTP_PORT;
         server_name         $HTTP_HOST 127.0.0.1 geonode;
-
+        access_log /var/log/nginx/nginx-access.log upstreamlog;
         include sites-enabled/*.conf;
     }
 
