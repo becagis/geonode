@@ -44,6 +44,10 @@ services:
      - geoportal33_net
      - npm_network
 
+  pg_tileserv:
+    networks:
+      - geoportal33_net
+
   geoserver:
     environment:
       - GEONODE_LB_HOST_IP=geoportal-uat.vntts.vn
