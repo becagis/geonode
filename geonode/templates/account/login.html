@@ -40,9 +40,6 @@
       {% if redirect_field_value %}
         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
       {% endif %}
-        {% if next %}
-        <input type="hidden" name="next" value="{{ next }}" />
-      {% endif %}
       <div class="form-group">
           <p><a href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a></p>
       </div>

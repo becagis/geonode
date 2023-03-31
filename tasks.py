@@ -38,8 +38,7 @@ logger = logging.getLogger(__name__)
 def waitfordbs(ctx):
     print("**************************databases*******************************")
     db_host = os.getenv('DATABASE_HOST', 'db')
-    db_port = os.getenv('DATABASE_PORT', '5432')
-    ctx.run(f"/usr/bin/wait-for-databases {db_host} {db_port}", pty=True)
+    ctx.run(f"/usr/bin/wait-for-databases {db_host}", pty=True)
 
 
 @task
@@ -66,7 +65,7 @@ def update(ctx):
     service_ready = False
     while not service_ready:
         try:
-            socket.gethostbyname(os.environ.get('GEONODE_CONTAINER', 'geonode')) # @becagis
+            socket.gethostbyname('geonode')
             service_ready = True
         except Exception:
             time.sleep(10)
@@ -86,7 +85,7 @@ def update(ctx):
     envs = {
         "local_settings": str(_localsettings()),
         "siteurl": os.environ.get('SITEURL', siteurl),
-        "geonode_docker_host": str(socket.gethostbyname(os.environ.get('GEONODE_CONTAINER', 'geonode'))), # @becagis
+        "geonode_docker_host": str(socket.gethostbyname('geonode')),
         "public_protocol": pub_protocol,
         "public_fqdn": str(pub_ip) + str(f':{pub_port}' if pub_port else ''),
         "public_host": str(pub_ip),
@@ -230,30 +229,6 @@ def prepare(ctx):
     ctx.run(
         f'sed -i "s|<logoutUri>.*</logoutUri>|<logoutUri>{new_ext_ip}account/logout/</logoutUri>|g" {oauth_config}',
         pty=True)
-
-    # @becagis
-    if os.environ.get('APP_ENV', 'local') == 'production':
-        ctx.run(
-            f'sed -i "s|<accessTokenUri>.*</accessTokenUri>|<accessTokenUri>{new_ext_ip}o/token/</accessTokenUri>|g" {oauth_config}',
-            pty=True)
-        ctx.run(
-            f'sed -i "s|<checkTokenEndpointUrl>.*</checkTokenEndpointUrl>|<checkTokenEndpointUrl>{new_ext_ip}api/o/v4/tokeninfo/</checkTokenEndpointUrl>|g" {oauth_config}',
-            pty=True)
-        ctx.run(
-            f'sed -i "s|<scopes>.*</scopes>|<scopes>write,read,groups</scopes>|g" {oauth_config}',
-            pty=True)
-        
-        # Updating GeoServer Global Config
-        global_config="/geoserver_data/data/global.xml"
-        ctx.run(
-            f'sed -i "s|<proxyBaseUrl>.*</proxyBaseUrl>|<proxyBaseUrl>{new_ext_ip}geoserver</proxyBaseUrl>|g" {global_config}',
-            pty=True)
-
-        # Updating REST Role Service Config
-        rest_config="/geoserver_data/data/security/role/'geonode REST role service'/config.xml"
-        ctx.run(
-            f'sed -i "s|<baseUrl>.*</baseUrl>|<baseUrl>{new_ext_ip}</baseUrl>|g" {rest_config}',
-            pty=True)
 
 
 @task
@@ -507,11 +482,11 @@ def _prepare_monitoring_fixture():
     pub_port = _geonode_public_port()
     print(f"Public PORT is {pub_port}")
     try:
-        geonode_ip = socket.gethostbyname(os.environ.get('GEONODE_CONTAINER', 'geonode')) # @becagis
+        geonode_ip = socket.gethostbyname('geonode')
     except Exception:
         geonode_ip = pub_ip
     try:
-        geoserver_ip = socket.gethostbyname(os.environ.get('GEOSERVER_CONTAINER', 'geoserver')) # @becagis
+        geoserver_ip = socket.gethostbyname('geoserver')
     except Exception:
         geoserver_ip = pub_ip
     d = '1970-01-01 00:00:00'

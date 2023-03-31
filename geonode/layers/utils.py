@@ -1101,7 +1101,6 @@ def gs_append_data_to_layer(layer, base_files, user):
         #  Changing layer name, mode and target
         task.layer.set_target_layer_name(layer.name)
         task.set_update_mode("APPEND")
-        task.set_charset("UTF-8")
         task.set_target(store_name=gs_layer.resource.store.name, workspace=gs_layer.resource.workspace.name)
         #  Starting import process
         import_session.commit()

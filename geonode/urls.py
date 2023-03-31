@@ -61,11 +61,6 @@ sitemaps = {
 
 homepage = register_url_event()(TemplateView.as_view(template_name='index.html'))
 
-# @becagis
-admin.site.site_header = settings.ADMIN_SITE_HEADER
-admin.site.site_title = settings.ADMIN_SITE_TITLE
-admin.site.index_title = settings.ADMIN_INDEX_TITLE
-
 urlpatterns = [
     url(r'^$',
         homepage,
@@ -183,10 +178,6 @@ urlpatterns += [
 
     # tinymce WYSIWYG HTML Editor
     url(r'^tinymce/', include('tinymce.urls')),
-]
-
-urlpatterns += [
-    url(r'^api/becagis/', include('geonode.becagis.urls')),
 ]
 
 if settings.GEONODE_APPS_ENABLE:

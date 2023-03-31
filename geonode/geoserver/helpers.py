@@ -367,7 +367,8 @@ def get_sld_for(gs_catalog, layer):
     else:
         return gs_style
 
-def set_layer_style_override(override, saved_layer, title, sld, base_file=None):
+
+def set_layer_style(saved_layer, title, sld, base_file=None):
     # Check SLD is valid
     try:
         if sld:
@@ -413,23 +414,13 @@ def set_layer_style_override(override, saved_layer, title, sld, base_file=None):
             if not style:
                 style = gs_catalog.create_style(
                     saved_layer.name, sld,
-                    overwrite=False, raw=True,
+                    overwrite=True, raw=True,
                     workspace=saved_layer.workspace)
             elif sld:
-                if override:
-                    style.style_format = _extract_style_version_from_sld(sld)
-                    style.update_body(sld)
-                else:
-                    import time
-                    ts = time.time()
-                    style = gs_catalog.create_style(
-                        saved_layer.name + "_" + str(int(ts * 100)), sld,
-                        overwrite=False, raw=True,
-                        workspace=saved_layer.workspace)
-
+                style.style_format = _extract_style_version_from_sld(sld)
+                style.update_body(sld)
         except Exception as e:
             logger.exception(e)
-            raise Exception(e)
 
     if layer and style:
         _old_styles = []
@@ -455,9 +446,6 @@ def set_layer_style_override(override, saved_layer, title, sld, base_file=None):
             except Exception as e:
                 logger.debug(e)
         set_styles(saved_layer, gs_catalog)
-
-def set_layer_style(saved_layer, title, sld, base_file=None):
-    set_layer_style_override(False, saved_layer, title, sld, base_file)
 
 
 def cascading_delete(layer_name=None, catalog=None):

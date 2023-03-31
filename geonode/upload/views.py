@@ -197,11 +197,13 @@ def save_step_view(req, session):
             charset=form.cleaned_data["charset"]
         )
         logger.debug(f"spatial_files: {spatial_files}")
+
         if overwrite:
             _layer = Layer.objects.filter(id=req.GET['layer_id'])
             if _layer.exists():
                 name = _layer.first().name
                 target_store = _layer.first().store
+
         import_session, upload = save_step(
             req.user,
             name,
@@ -220,7 +222,7 @@ def save_step_view(req, session):
             charset_encoding=form.cleaned_data["charset"],
             target_store=target_store
         )
-        
+
         if upload and import_session and import_session.state in (Upload.STATE_READY, Upload.STATE_PENDING):
             import_session.tasks[0].set_charset(form.cleaned_data["charset"])
             sld = None
@@ -699,7 +701,7 @@ def view(req, step=None):
 
     upload_session = None
     upload_id = req.GET.get('id', None)
-    
+
     if step is None:
         if upload_id:
             # upload recovery
@@ -711,6 +713,7 @@ def view(req, step=None):
             if session:
                 return next_step_response(req, session)
         step = 'save'
+
         # delete existing session
         if upload_id and upload_id in req.session:
             del req.session[upload_id]
@@ -721,6 +724,7 @@ def view(req, step=None):
                 req,
                 "upload/layer_upload_invalid.html",
                 context={})
+
         upload_obj = get_object_or_404(
             Upload, import_id=upload_id, user=req.user)
         session = upload_obj.get_session
@@ -745,6 +749,7 @@ def view(req, step=None):
             except Exception as e:
                 logger.exception(e)
                 return error_response(req, errors=e.args)
+
         resp = _steps[step](req, upload_session)
         resp_js = None
         if resp:
@@ -758,6 +763,7 @@ def view(req, step=None):
             except Exception as e:
                 logger.exception(e)
                 return error_response(req, exception=e)
+
             # must be put back to update object in session
             if upload_session:
                 if resp_js and step == 'final':

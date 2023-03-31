@@ -103,8 +103,7 @@ from geonode.utils import (
     mkdtemp)
 from geonode.geoserver.helpers import (
     set_layer_style,
-    ogc_server_settings,
-    set_layer_style_override)
+    ogc_server_settings)
 from geonode.geoserver.security import set_geowebcache_invalidate_cache
 from geonode.tasks.tasks import set_permissions
 from geonode.upload.forms import LayerUploadForm as UploadViewsetForm
@@ -310,11 +309,8 @@ def layer_style_upload(request):
             _PERMISSION_MSG_MODIFY)
 
         sld = request.FILES['sld_file'].read()
-        
-        override = request.POST.get('override', '0')
-        override = True if override == '1' or override == 1 else False
 
-        set_layer_style_override(override, layer, data.get('layer_title'), sld)
+        set_layer_style(layer, data.get('layer_title'), sld)
         body['url'] = layer.get_absolute_url()
         body['bbox'] = layer.bbox_string
         body['crs'] = {
@@ -1191,7 +1187,6 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
                 data_retriever = form.cleaned_data["data_retriever"]
                 base_file = data_retriever.get("base_file").get_path(allow_transfer=False)
                 files = {_file.split('.')[1]: _file for _file in data_retriever.file_paths.values()}
-                out['test'] = 1
                 if '.zip' in base_file:
                     files, _tmpdir = get_files(base_file)
 
@@ -1209,16 +1204,13 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
                 resource_is_valid = validate_input_source(
                     layer=layer, filename=base_file, files=files, action_type="replace"
                 )
-                out['test'] = 2
                 data_retriever.delete_files()
                 if resource_is_valid:
                     # Create a new upload session
                     request.GET = {"layer_id": layer.id}
                     steps = [None, "check", "final"] if layer.is_vector() and settings.ASYNC_SIGNALS else [None, "final"]
-                    out['test'] = 3
                     for _step in steps:
                         if _step != 'final' or (_step == 'final' and not settings.ASYNC_SIGNALS):
-                            out['test'] = 5
                             response, cat, valid = UploadViewSet()._emulate_client_upload_step(
                                 request,
                                 _step
@@ -1251,7 +1243,6 @@ def layer_replace(request, layername, template='layers/layer_replace.html'):
             out['success'] = False
             out['errors'] = form.errors
             out['errormsgs'] = errormsgs
-            out['test'] = '2'
 
         if out['success']:
             status_code = 200

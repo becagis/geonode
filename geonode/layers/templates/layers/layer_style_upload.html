@@ -62,16 +62,8 @@
       </div>
     </section>
 
-    <section class="widget">
-
-    </section>
-
     <section>
-      {% comment %} <div class="btn-danger"><strong>{% trans "WARNING" %}: </strong>{% trans "This will most probably overwrite the current default style!" %}</div> {% endcomment %}
-      <select name="override" id="id_override" style="font-size:17px !important">
-          <option value="0">{% trans "Create new style" %}</option>
-          <option value="1">{% trans "Overwrite the current default style" %}</option>
-      </select>
+      <div class="btn-danger"><strong>{% trans "WARNING" %}: </strong>{% trans "This will most probably overwrite the current default style!" %}</div>
       <a href="{% url "layer_sld_upload" resource.alternate %}" id="clear-button" class="btn btn-default">{% trans "Clear" %}</a>
       <a href="#" id="upload-button" class="btn btn-primary">{% trans "Upload files" %}</a>
     </section>

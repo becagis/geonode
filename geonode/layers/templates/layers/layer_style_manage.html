@@ -9,12 +9,7 @@
 {% if error %}
 <div class="alert alert-error">{{ error }}</div>
 {% endif %}
-<style>
-  .multiselect-container.dropdown-menu {
-    max-height: 200px;
-    overflow: auto;
-  }
-</style>
+
 <div class="page-header">
   <h2>{% trans "Manage Styles" %}</h2>
 </div>
@@ -32,11 +27,9 @@
         <select id='default_style' name='default_style' required='required'>
           {% for style in layer_styles %}
             {% if style.0 == layer.default_style.name or style.0 == layer.default_style.name or style.1 == layer.default_style.sld_title %}
-            {% comment %} <option value="{{ style.0 }}" selected>{% if style.1 %}{{ style.1 }}{% else %}{{ style.0 }}{% endif %}</option> {% endcomment %}
-            <option value="{{ style.0 }}" selected>{{ style.0 }}</option>
+            <option value="{{ style.0 }}" selected>{% if style.1 %}{{ style.1 }}{% else %}{{ style.0 }}{% endif %}</option>
             {% else %}
-            {% comment %} <option value="{{ style.0 }}">{% if style.1 %}{{ style.1 }}{% else %}{{ style.0 }}{% endif %}</option> {% endcomment %}
-            <option value="{{ style.0 }}">{{ style.0 }}</option>
+            <option value="{{ style.0 }}">{% if style.1 %}{{ style.1 }}{% else %}{{ style.0 }}{% endif %}</option>
             {% endif %}
           {% endfor %}
         </select>
@@ -54,11 +47,9 @@
         <select multiple="multiple" id="style-select" name="style-select">
           {% for style in gs_styles %}
             {% if style.0 in layer_style_names %}
-            <option value="{{ style.0 }}" selected>{{ style.0 }}</option>
-            {% comment %} <option value='{{ style.0 }}' selected>{% if style.1 %}{{ style.1 }}{% else %}{{ style.0 }}{% endif %}</option> {% endcomment %}
+            <option value='{{ style.0 }}' selected>{% if style.1 %}{{ style.1 }}{% else %}{{ style.0 }}{% endif %}</option>
             {% else %}
-            <option value="{{ style.0 }}">{{ style.0 }}</option>
-            {% comment %} <option value='{{ style.0 }}'>{% if style.1 %}{{ style.1 }}{% else %}{% endif %}</option> {% endcomment %}
+            <option value='{{ style.0 }}'>{% if style.1 %}{{ style.1 }}{% else %}{{ style.0 }}{% endif %}</option>
             {% endif %}
           {% endfor %}
         </select>
@@ -111,22 +102,6 @@
           styleName.toUpperCase().indexOf(searchString.toUpperCase()) > -1 ? listElement.show() : listElement.hide();
       });
     });
-     $('#style-select').on('change', function() {
-        const vals = $('#style-select').val();
-
-        const defaultStyleSelector = $('#default_style');
-        const defaultVal = defaultStyleSelector.val();
-        defaultStyleSelector.empty();
-        
-        vals.forEach(function(val) {
-          defaultStyleSelector.append($('<option>', {
-            value: val,
-            text: val
-          }))
-        })
-        
-        defaultStyleSelector.val(defaultVal);
-      })
   });
 </script>
 {% endblock %}

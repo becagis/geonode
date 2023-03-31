@@ -176,7 +176,6 @@ define(function (require, exports) {
         }
         else {
             perm = permissionsString('#permission_form','layers');
-            form_data.append('permissions', JSON.stringify(perm));
         }
 
         if (time_enabled) {
@@ -254,6 +253,7 @@ define(function (require, exports) {
 
         form_data.append('store_spatial_files', true);
         form_data.append('base_file', this.main);
+        form_data.append('permissions', JSON.stringify(perm));
 
         for (i = 0; i < this.files.length; i += 1) {
             file = this.files[i];
@@ -274,7 +274,6 @@ define(function (require, exports) {
         if ($('#id_style_upload_form').prop('checked')) {
              form_data.append('style_upload_form', true);
              form_data.append('layer_title', $('#id_layer_title').val());
-             form_data.append('override', $('#id_override').val());
         }
         return form_data;
     };

@@ -43,14 +43,6 @@
     #paneltbar {
       margin-top: 1px !important;
     }
-    ul.list-unstyled {
-      max-width: 300px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    ul.list-unstyled li {
-      display: inline-flex;
-    }
     </style>
 
     <h2 class="page-title">{{ resource.title|default:resource.alternate }}</h2>
@@ -318,9 +310,9 @@
           {% if links_download %}
             <button class="btn btn-primary btn-md btn-block" data-toggle="modal" data-target="#download-layer">{% trans "Download Layer" %}</button>
           {% else %}
-            {% comment %} {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated %}
             <button class="btn btn-primary btn-md btn-block" id="request-download">{% trans "Request Download" %}</button>
-            {% endif %} {% endcomment %}
+            {% endif %}
           {% endif %}
           </li>
         {% endif %}
@@ -486,11 +478,11 @@
       {% endif %}
     {% endif %}
 
-    {% comment %} {% if not request.user_agent.is_mobile %}  
+    {% if not request.user_agent.is_mobile %}  
     <li class="list-group-item">
       <a href="{% url "new_map" %}?layer={{resource.service_typename}}&view=True" class="btn btn-default btn-md btn-block">{% trans "View Layer" %}</a>
     </li>
-    {% endif %} {% endcomment %}
+    {% endif %}
 
     {% if not request.user_agent.is_mobile %}  
     <li class="list-group-item">
@@ -584,14 +576,14 @@
           {% endfor %}
         </ul>
     </li>
-    {% comment %} {% if user.is_authenticated and not READ_ONLY_MODE %}
+    {% if user.is_authenticated and not READ_ONLY_MODE %}
       <li class="list-group-item">
         <h4>{% trans "Create a map using this layer" %}</h4>
         <p>{% trans "Click the button below to generate a new map based on this layer." %}</p>
           <a href="{% url "new_map" %}?layer={{resource.service_typename}}" class="btn btn-primary btn-block">{% trans "Create a Map" %}</a>
       </li>
-    {% endif %} {% endcomment %}
-    {% comment %} {% if maps %}
+    {% endif %}
+    {% if maps %}
         <li class="list-group-item">
             <h4>{% trans "Add the layer to an existing map" %}</h4>
             <form action="{% url "add_layer" %}" method="GET">
@@ -606,7 +598,7 @@
                 <input type="submit" class="btn btn-primary btn-block" value="{% trans "Add to Map" %}">
             </form>
         </li>
-    {% endif %} {% endcomment %}
+    {% endif %}
 
     {% if documents.count > 0 %}
     <li class="list-group-item">
@@ -628,17 +620,14 @@
         {% if OGC_SERVER.default.BACKEND == 'geonode.geoserver' %}
             {% get_all_resource_styles resource as resource_styles_all%}
             {% for style in resource_styles_all %}
-            <li title="{{ style.name }}">
+            <li>
               {% if resource.default_style == style %}
-              <input type="radio" checked name="style" id="{{ style.name }}" value="{{ style.name }}"/>
-               {% comment %} <input type="radio" checked name="style" id="{{ style.name }}" value="{{ style.sld_title|default_if_none:style.name }}"/> {% endcomment %}
+               <input type="radio" checked name="style" id="{{ style.name }}" value="{{ style.sld_title|default_if_none:style.name }}"/>
               {% trans "(default style)" %}
               {% else %}
-              {% comment %} <input type="radio" name="style" id="{{ style.name }}" value="{{ style.sld_title|default_if_none:style.name }}"/> {% endcomment %}
-              <input type="radio" name="style" id="{{ style.name }}" value="{{ style.name }}"/>
+              <input type="radio" name="style" id="{{ style.name }}" value="{{ style.sld_title|default_if_none:style.name }}"/>
               {% endif %}
-              {% comment %} <a href="{{ GEOSERVER_BASE_URL }}{{ style.absolute_url }}" >{{ style.sld_title|default_if_none:style.name }}</a> {% endcomment %}
-              <a href="{{ GEOSERVER_BASE_URL }}{{ style.absolute_url }}" >{{ style.name }}</a>
+              <a href="{{ GEOSERVER_BASE_URL }}{{ style.absolute_url }}" >{{ style.sld_title|default_if_none:style.name }}</a>
             </li>
             {% empty %}
             <li>{% trans "No styles associated with this layer" %}</li>

@@ -59,9 +59,7 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 # Setting debug to true makes Django serve static media and
 # present pretty error pages.
-DEBUG = False # ast.literal_eval(os.getenv('DEBUG', 'True'))
-
-BECAMAPS_URL = os.getenv('BECAMAPS_URL', 'https://becamaps-uat.becamex.com.vn')
+DEBUG = ast.literal_eval(os.getenv('DEBUG', 'True'))
 
 # Set to True to load non-minified versions of (static) client dependencies
 # Requires to set-up Node and tools that are required for static development
@@ -192,11 +190,41 @@ USE_L10N = ast.literal_eval(os.getenv('USE_I18N', 'True'))
 LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', "en")
 
 _DEFAULT_LANGUAGES = """(
+    ('af', 'Afrikaans'),
+    ('sq', 'Albanian'),
+    ('am', 'Amharic'),
+    ('ar', 'Arabic'),
+    ('id', 'Bahasa Indonesia'),
+    ('bn', 'Bengali'),
+    ('de', 'Deutsch'),
     ('en', 'English'),
-    ('es', 'Español')
+    ('es', 'Español'),
+    ('fr', 'Français'),
+    ('it', 'Italiano'),
+    ('km', 'Khmer'),
+    ('nl', 'Nederlands'),
+    ('ne', 'Nepali'),
+    ('fa', 'Persian'),
+    ('pl', 'Polish'),
+    ('pt', 'Portuguese'),
+    ('pt-br', 'Portuguese (Brazil)'),
+    ('ru', 'Russian'),
+    ('si', 'Sinhala'),
+    ('sw', 'Swahili'),
+    ('sv', 'Swedish'),
+    ('tl', 'Tagalog'),
+    ('ta', 'Tamil'),
+    ('uk', 'Ukranian'),
+    ('vi', 'Vietnamese'),
+    ('el', 'Ελληνικά'),
+    ('th', 'ไทย'),
+    ('zh-cn', '中文'),
+    ('ja', '日本語'),
+    ('ko', '한국어'),
+    ('sk', 'Slovensky'),
 )"""
 
-LANGUAGES = ast.literal_eval(_DEFAULT_LANGUAGES) #ast.literal_eval(os.getenv('LANGUAGES', _DEFAULT_LANGUAGES))
+LANGUAGES = ast.literal_eval(os.getenv('LANGUAGES', _DEFAULT_LANGUAGES))
 
 EXTRA_LANG_INFO = {
     'am': {
@@ -280,7 +308,6 @@ STATIC_URL = os.getenv('STATIC_URL', f'{FORCE_SCRIPT_NAME}/{STATICFILES_LOCATION
 
 # Additional directories which hold static files
 _DEFAULT_STATICFILES_DIRS = [
-    os.path.join(PROJECT_ROOT, '../'+STATICFILES_LOCATION), # @becagis
     os.path.join(PROJECT_ROOT, STATICFILES_LOCATION),
 ]
 
@@ -439,7 +466,7 @@ INSTALLED_APPS = (
     'modeltranslation',
     'dal',
     'dal_select2',
-    # 'grappelli', # @becagis
+    'grappelli',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -714,10 +741,7 @@ TEMPLATES = [
     {
         'NAME': 'GeoNode Project Templates',
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(PROJECT_ROOT, "../templates"), # @becagis
-            os.path.join(PROJECT_ROOT, "templates")
-        ],
+        'DIRS': [os.path.join(PROJECT_ROOT, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': CONTEXT_PROCESSORS,
@@ -732,7 +756,7 @@ TEMPLATES = [
 ]
 
 MIDDLEWARE = (
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -788,7 +812,6 @@ if 'announcements' in INSTALLED_APPS:
     )
 
 OAUTH2_PROVIDER = {
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 172800, # @becagis
     'SCOPES': {
         'openid': 'Default to OpenID',
         'read': 'Read scope',
@@ -1539,49 +1562,13 @@ if GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY == 'mapstore':
         MAPSTORE_CATALOGUE_SELECTED_SERVICE = list(list(GEONODE_CATALOGUE_SERVICE.keys()))[0]
 
     DEFAULT_MS2_BACKGROUNDS = [
-        # @becagis
-         {
-            "type": "tileprovider",
-            "title": "Google Maps",
-            "provider": "custom",
-            "name": "google-maps",
-            "group": "background",
-            "visibility": True,
-            "thumbURL": f"{SITEURL}static/custom/img/google-maps.jpg",
-            "url": "http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
-            "options": {
-                "subdomains": [ "mt0", "mt1", "mt2", "mt3"]
-            }
-        }, {
-            "type": "tileprovider",
-            "title": "Google Satellite",
-            "provider": "custom",
-            "name": "google-satellite",
-            "group": "background",
-            "visibility": False,
-            "thumbURL": f"{SITEURL}static/custom/img/google-satellite.jpg",
-            "url": "http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
-            "options": {
-                "subdomains": [ "mt0", "mt1", "mt2", "mt3"]
-            }
-        }, 
-        # {
-        #     "type": "tileprovider",
-        #     "title": "BecaGIS OSM",
-        #     "provider": "custom",
-        #     "name": "becagis-maps",
-        #     "group": "background",
-        #     "visibility": False,
-        #     "thumbURL": f"{SITEURL}static/custom/img/vietnam-osm.jpg",
-        #     "url": "https://thuduc-maps.hcmgis.vn/thuducserver/gwc/service/wmts?layer=thuduc:thuduc_maps&style=&tilematrixset=EPSG:900913&Service=WMTS&Request=GetTile&Version=1.0.0&Format=image/png&TileMatrix=EPSG:900913:{z}&TileCol={x}&TileRow={y}"
-        # },
         {
             "type": "osm",
             "title": "Open Street Map",
             "name": "mapnik",
             "source": "osm",
             "group": "background",
-            "visibility": False
+            "visibility": True
         }, {
             "type": "tileprovider",
             "title": "OpenTopoMap",
@@ -2087,23 +2074,21 @@ THUMBNAIL_SIZE = {
 
 THUMBNAIL_BACKGROUND = {
     # class generating thumbnail's background
-    # 'class': 'geonode.thumbs.background.WikiMediaTileBackground',
+    'class': 'geonode.thumbs.background.WikiMediaTileBackground',
     # 'class': 'geonode.thumbs.background.OSMTileBackground',
     # 'class': 'geonode.thumbs.background.GenericXYZBackground',
     # initialization parameters for generator instance, valid only for generic classes
-    # 'options': {
-    #     # 'url': URL for the generic xyz / tms service
-    #     # 'tms': False by default. Set to True if the service is TMS
-    #     # 'tile_size': tile size for the generic xyz service, default is 256
-    # },
-    # example options for a TMS service
-
-    # @becagis
-    'class': 'geonode.thumbs.background.GenericXYZBackground',
     'options': {
-       'url': 'https://mt2.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-       'tms': False
+        # 'url': URL for the generic xyz / tms service
+        # 'tms': False by default. Set to True if the service is TMS
+        # 'tile_size': tile size for the generic xyz service, default is 256
     },
+    # example options for a TMS service
+    # 'class': 'geonode.thumbs.background.GenericXYZBackground',
+    # 'options': {
+    #    'url': 'http://maps.geosolutionsgroup.com/geoserver/gwc/service/tms/1.0.0/osm%3Aosm_simple_light@EPSG%3A900913@png/{z}/{x}/{y}.png',
+    #    'tms': True
+    # },
 }
 
 # define the urls after the settings are overridden
@@ -2250,11 +2235,3 @@ EXTRA_METADATA_SCHEMA = {**{
     "document": os.getenv('DOCUMENT_EXTRA_METADATA_SCHEMA', DEFAULT_EXTRA_METADATA_SCHEMA),
     "geoapp": os.getenv('GEOAPP_EXTRA_METADATA_SCHEMA', DEFAULT_EXTRA_METADATA_SCHEMA)
 }, **CUSTOM_METADATA_SCHEMA}
-
-# @becagis
-ADMIN_SITE_HEADER = os.getenv('ADMIN_SITE_HEADER', 'GeoPortal Admin')
-ADMIN_SITE_TITLE = os.getenv('ADMIN_SITE_TITLE', 'GeoPortal Admin Portal')
-ADMIN_INDEX_TITLE = os.getenv('ADMIN_INDEX_TITLE', 'Welcome to GeoPortal')
-
-
-from .ldap_settings import *
