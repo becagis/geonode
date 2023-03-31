@@ -36,13 +36,13 @@ fi
 # https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html
 echo "Sanity checks on http/s ports configuration"
 if [ -z "${HTTP_PORT}" ]; then
-        HTTP_PORT=80
+        export HTTP_PORT=80
 fi
 if [ -z "${HTTPS_PORT}" ]; then
-        HTTPS_PORT=443
+        export HTTPS_PORT=443
 fi
 if [ -z "${JENKINS_HTTP_PORT}" ]; then
-        JENKINS_HTTP_PORT=9080
+        export JENKINS_HTTP_PORT=9080
 fi
 
 echo "Replacing environement variables"
