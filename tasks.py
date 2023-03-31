@@ -38,7 +38,9 @@ logger = logging.getLogger(__name__)
 def waitfordbs(ctx):
     print("**************************databases*******************************")
     db_host = os.getenv('DATABASE_HOST', 'db')
-    ctx.run(f"/usr/bin/wait-for-databases {db_host}", pty=True)
+    # @becagis
+    db_port = os.getenv('DATABASE_PORT', '5432')
+    ctx.run(f"/usr/bin/wait-for-databases {db_host} {db_port}", pty=True)
 
 
 @task
@@ -214,6 +216,8 @@ def prepare(ctx):
     client_id = os.environ['OAUTH2_CLIENT_ID']
     client_secret = os.environ['OAUTH2_CLIENT_SECRET']
     oauth_config = "/geoserver_data/data/security/filter/geonode-oauth2/config.xml"
+    scopes = "write,read,groups" # @becagis
+
     ctx.run(
         f'sed -i "s|<cliendId>.*</cliendId>|<cliendId>{client_id}</cliendId>|g" {oauth_config}',
         pty=True)
@@ -228,6 +232,11 @@ def prepare(ctx):
         pty=True)
     ctx.run(
         f'sed -i "s|<logoutUri>.*</logoutUri>|<logoutUri>{new_ext_ip}account/logout/</logoutUri>|g" {oauth_config}',
+        pty=True)
+    
+    # @becagis
+    ctx.run(
+        f'sed -i "s|<scopes>.*</scopes>|<scopes>{scopes}</scopes>|g" {oauth_config}',
         pty=True)
 
 

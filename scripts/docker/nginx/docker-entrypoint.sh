@@ -32,6 +32,8 @@ else
         ln -sf "/geonode-certificates/autoissued" /certificate_symlink
 fi
 
+# @becagis
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html
 echo "Sanity checks on http/s ports configuration"
 if [ -z "${HTTP_PORT}" ]; then
         HTTP_PORT=80
