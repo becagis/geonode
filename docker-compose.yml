@@ -8,7 +8,8 @@ x-common-django:
   env_file:
     - .env
   volumes:
-    # - '.:/usr/src/geonode'
+    # @becagus
+    - '.:/usr/src/geonode'
     - statics:/mnt/volumes/statics
     - geoserver-data-dir:/geoserver_data/data
     - backup-restore:/backup_restore
@@ -38,7 +39,6 @@ services:
   # Celery worker that executes celery tasks created by Django.
   celery:
     << : *default-common-django
-    image: geonode/geonode:3.3.2
     container_name: celery4${COMPOSE_PROJECT_NAME}
     depends_on:
       - django
@@ -53,10 +53,11 @@ services:
     build: ./scripts/docker/nginx/
     container_name: nginx4${COMPOSE_PROJECT_NAME}
     environment:
+      # @becagis
       - HTTPS_HOST=${HTTPS_HOST}
       - HTTP_HOST=${HTTP_HOST}
-      - HTTPS_PORT=${HTTPS_PORT}
-      - HTTP_PORT=${HTTP_PORT}
+      - HTTPS_PORT=443
+      - HTTP_PORT=80
       - LETSENCRYPT_MODE=${LETSENCRYPT_MODE}
       - RESOLVER=127.0.0.11
     ports:

@@ -48,6 +48,15 @@ RUN pip install pylibmc \
 COPY . /usr/src/geonode/
 WORKDIR /usr/src/geonode
 
+# Add a non-root user to prevent files being created with root permissions on host machine.
+ARG PUID=1000
+ENV PUID ${PUID}
+ARG PGID=1000
+ENV PGID ${PGID}
+
+RUN addgroup --system --gid ${PUID} django \
+    && adduser --system -u ${PGID} --ingroup django django
+
 COPY monitoring-cron /etc/cron.d/monitoring-cron
 RUN chmod 0644 /etc/cron.d/monitoring-cron
 RUN crontab /etc/cron.d/monitoring-cron
@@ -65,17 +74,18 @@ RUN chmod +x /usr/bin/celery-commands
 COPY celery-cmd /usr/bin/celery-cmd
 RUN chmod +x /usr/bin/celery-cmd
 
-# Install "geonode-contribs" apps
-RUN cd /usr/src; git clone https://github.com/GeoNode/geonode-contribs.git -b master
-# Install logstash and centralized dashboard dependencies
-RUN cd /usr/src/geonode-contribs/geonode-logstash; pip install --upgrade  -e . \
-    cd /usr/src/geonode-contribs/ldap; pip install --upgrade  -e .
+# @becagis
+# # Install "geonode-contribs" apps
+# RUN cd /usr/src; git clone https://github.com/GeoNode/geonode-contribs.git -b master
+# # Install logstash and centralized dashboard dependencies
+# RUN cd /usr/src/geonode-contribs/geonode-logstash; pip install --upgrade  -e . \
+#     cd /usr/src/geonode-contribs/ldap; pip install --upgrade  -e .
 
 RUN pip install --upgrade --no-cache-dir  --src /usr/src -r requirements.txt
 RUN pip install --upgrade  -e .
 
-# Cleanup apt update lists
-RUN rm -rf /var/lib/apt/lists/*
+# # Cleanup apt update lists
+# RUN rm -rf /var/lib/apt/lists/*
 
 # Export ports
 EXPOSE 8000

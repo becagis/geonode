@@ -37,7 +37,9 @@ logger = logging.getLogger(__name__)
 @task
 def waitfordbs(ctx):
     print("**************************databases*******************************")
+    # @becagis
     db_host = os.getenv('DATABASE_HOST', 'db')
+    db_port = os.getenv('DATABASE_PORT', '5432')
     ctx.run(f"/usr/bin/wait-for-databases {db_host}", pty=True)
 
 
@@ -228,6 +230,10 @@ def prepare(ctx):
         pty=True)
     ctx.run(
         f'sed -i "s|<logoutUri>.*</logoutUri>|<logoutUri>{new_ext_ip}account/logout/</logoutUri>|g" {oauth_config}',
+        pty=True)
+    # @becagis
+    ctx.run(
+        f'sed -i "s|<scopes>.*</scopes>|<scopes>write,read,groups</scopes>|g" {oauth_config}',
         pty=True)
 
 
