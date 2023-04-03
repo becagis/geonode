@@ -47,7 +47,7 @@ services:
     #   - seccomp:unconfined
 
     # Overrides default command so things don't shut down after the process ends.
-    command: sleep infinity
+    command: "python manage.py runserver 0.0.0.0:8000"
 
   celery:
     restart: "no"

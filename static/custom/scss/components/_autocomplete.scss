@@ -1,0 +1,12 @@
+.autocomplete-input .ac-results {
+    border: none;
+    border-radius: $border-radius;
+    overflow: hidden;
+    margin-top: 12px;
+    box-shadow: rgb(0 0 0 / 20%) 0px 5px 5px -3px, rgb(0 0 0 / 14%) 0px 8px 10px 1px, rgb(0 0 0 / 12%) 0px 3px 14px 2px;
+    width: 100%;
+
+    > .result-wrapper {
+        padding: 8px 10px;
+    }
+}

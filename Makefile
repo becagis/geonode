@@ -58,3 +58,11 @@ reset: down up wait sync
 hardreset: pull build reset
 
 develop: pull build up sync
+
+# DEV
+
+up-dev:
+	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml up -d
+
+down-dev:
+	docker-compose -f docker-compose.yml -f .devcontainer/docker-compose.yml down

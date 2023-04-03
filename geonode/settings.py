@@ -308,6 +308,7 @@ STATIC_URL = os.getenv('STATIC_URL', f'{FORCE_SCRIPT_NAME}/{STATICFILES_LOCATION
 
 # Additional directories which hold static files
 _DEFAULT_STATICFILES_DIRS = [
+    os.path.join(PROJECT_ROOT, '../'+STATICFILES_LOCATION), # @becagis
     os.path.join(PROJECT_ROOT, STATICFILES_LOCATION),
 ]
 
@@ -466,7 +467,7 @@ INSTALLED_APPS = (
     'modeltranslation',
     'dal',
     'dal_select2',
-    'grappelli',
+    # 'grappelli', # @becagis
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -741,7 +742,10 @@ TEMPLATES = [
     {
         'NAME': 'GeoNode Project Templates',
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(PROJECT_ROOT, "templates")],
+        'DIRS': [
+            os.path.join(PROJECT_ROOT, '../templates'), # @becagis
+            os.path.join(PROJECT_ROOT, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': CONTEXT_PROCESSORS,
@@ -1562,13 +1566,39 @@ if GEONODE_CLIENT_LAYER_PREVIEW_LIBRARY == 'mapstore':
         MAPSTORE_CATALOGUE_SELECTED_SERVICE = list(list(GEONODE_CATALOGUE_SERVICE.keys()))[0]
 
     DEFAULT_MS2_BACKGROUNDS = [
+        # @becagis
+         {
+            "type": "tileprovider",
+            "title": "Google Maps",
+            "provider": "custom",
+            "name": "google-maps",
+            "group": "background",
+            "visibility": True,
+            "thumbURL": f"{SITEURL}static/custom/img/google-maps.jpg",
+            "url": "http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
+            "options": {
+                "subdomains": [ "mt0", "mt1", "mt2", "mt3"]
+            }
+        }, {
+            "type": "tileprovider",
+            "title": "Google Satellite",
+            "provider": "custom",
+            "name": "google-satellite",
+            "group": "background",
+            "visibility": False,
+            "thumbURL": f"{SITEURL}static/custom/img/google-satellite.jpg",
+            "url": "http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+            "options": {
+                "subdomains": [ "mt0", "mt1", "mt2", "mt3"]
+            }
+        }, 
         {
             "type": "osm",
             "title": "Open Street Map",
             "name": "mapnik",
             "source": "osm",
             "group": "background",
-            "visibility": True
+            "visibility": False
         }, {
             "type": "tileprovider",
             "title": "OpenTopoMap",
@@ -2073,22 +2103,30 @@ THUMBNAIL_SIZE = {
 }
 
 THUMBNAIL_BACKGROUND = {
-    # class generating thumbnail's background
-    'class': 'geonode.thumbs.background.WikiMediaTileBackground',
-    # 'class': 'geonode.thumbs.background.OSMTileBackground',
-    # 'class': 'geonode.thumbs.background.GenericXYZBackground',
-    # initialization parameters for generator instance, valid only for generic classes
-    'options': {
-        # 'url': URL for the generic xyz / tms service
-        # 'tms': False by default. Set to True if the service is TMS
-        # 'tile_size': tile size for the generic xyz service, default is 256
-    },
-    # example options for a TMS service
-    # 'class': 'geonode.thumbs.background.GenericXYZBackground',
+    # @becagis
+
+    # # class generating thumbnail's background
+    # 'class': 'geonode.thumbs.background.WikiMediaTileBackground',
+    # # 'class': 'geonode.thumbs.background.OSMTileBackground',
+    # # 'class': 'geonode.thumbs.background.GenericXYZBackground',
+    # # initialization parameters for generator instance, valid only for generic classes
     # 'options': {
-    #    'url': 'http://maps.geosolutionsgroup.com/geoserver/gwc/service/tms/1.0.0/osm%3Aosm_simple_light@EPSG%3A900913@png/{z}/{x}/{y}.png',
-    #    'tms': True
+    #     # 'url': URL for the generic xyz / tms service
+    #     # 'tms': False by default. Set to True if the service is TMS
+    #     # 'tile_size': tile size for the generic xyz service, default is 256
     # },
+    # # example options for a TMS service
+    # # 'class': 'geonode.thumbs.background.GenericXYZBackground',
+    # # 'options': {
+    # #    'url': 'http://maps.geosolutionsgroup.com/geoserver/gwc/service/tms/1.0.0/osm%3Aosm_simple_light@EPSG%3A900913@png/{z}/{x}/{y}.png',
+    # #    'tms': True
+    # # },
+    
+    'class': 'geonode.thumbs.background.GenericXYZBackground',
+    'options': {
+       'url': 'https://mt2.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+       'tms': False
+    },
 }
 
 # define the urls after the settings are overridden
@@ -2235,3 +2273,9 @@ EXTRA_METADATA_SCHEMA = {**{
     "document": os.getenv('DOCUMENT_EXTRA_METADATA_SCHEMA', DEFAULT_EXTRA_METADATA_SCHEMA),
     "geoapp": os.getenv('GEOAPP_EXTRA_METADATA_SCHEMA', DEFAULT_EXTRA_METADATA_SCHEMA)
 }, **CUSTOM_METADATA_SCHEMA}
+
+
+# @becagis
+ADMIN_SITE_HEADER = os.getenv('ADMIN_SITE_HEADER', 'GeoPortal Admin')
+ADMIN_SITE_TITLE = os.getenv('ADMIN_SITE_TITLE', 'GeoPortal Admin Portal')
+ADMIN_INDEX_TITLE = os.getenv('ADMIN_INDEX_TITLE', 'Welcome to GeoPortal')
