@@ -206,7 +206,7 @@ def create_gs_layer(name, title, geometry_type, attributes=None):
     )
     headers = {'Content-Type': 'application/xml'}
     _user, _password = ogc_server_settings.credentials
-    req = requests.post(url, data=xml, headers=headers, auth=(_user, _password))
+    req = requests.post(url, data=xml.encode("utf-8"), headers=headers, auth=(_user, _password))
     if req.status_code != 201:
         logger.error(f'Request status code was: {req.status_code}')
         logger.error(f'Response was: {req.text}')
